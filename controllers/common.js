@@ -1,23 +1,6 @@
 
 const dbHelpers = require('../helpers/dbHelpers');
 
-exports.isAuthorized = (req, res, next) => {  
-  if (!req.session || !req.session.logined) {
-    if (req.xhr) {
-      return res.json({
-        result:102, 
-        msg:'로그인이 필요한 서비스입니다',
-        rUrl: `/auth/login`
-      });
-    } else {
-      res.redirect(`/auth/login?path=${req.originalUrl}`);
-      return;
-    }
-  }
-
-  return next();
-}
-
 exports.getLeftMenu = async (req, res, next) => {
  
   res.locals.account = req.session.account;

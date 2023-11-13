@@ -72,7 +72,7 @@ exports.templateForgotEmail = (_name, _account, _token) => {
                         <td width="15" style="display: block; width: 15px">&nbsp;&nbsp;&nbsp;</td>
                         <td width="100%">
                           <span style="font-family: Helvetica Neue, Helvetica, Lucida Grande, tahoma, verdana,arial, sans-serif;font-size: 19px;line-height: 32px;color: #1877f2;">
-                            PreWallet</span>
+                            PlanA</span>
                         </td>
                       </tr>
                       <tr style="border-bottom: solid 1px #e5e5e5">

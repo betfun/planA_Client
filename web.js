@@ -10,6 +10,9 @@ const errorHandlers = require('./helpers/errorHandlers');
 
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
+const userRouter = require('./routes/user');
+
+const commonHelper = require('./helpers/commonHelpers');
 
 const app = express();
 
@@ -49,6 +52,7 @@ app.use(async function(req, res, next) {
 
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
+app.use('/user', commonHelper.isAuthorized, userRouter);
 
 var debug = require('debug')(process.env.PKG_NAME+':server');
 var http = require('http');

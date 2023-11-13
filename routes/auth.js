@@ -18,10 +18,4 @@ router.post('/findpassword', catchErrors(authCtlr.dofindPassword));
 router.get('/resetpassword', catchErrors(authCtlr.resetPassword));
 router.post('/resetpassword', catchErrors(authCtlr.doResetPassword));
 
-/**
- * 회원 정보 수정
- */
-router.get('/profile', catchErrors(userCtlr.getModifyUserInfo));
-router.post('/profile', upload.single('passport'), catchErrors(userCtlr.modifyUserInfo));
-
 module.exports = router;

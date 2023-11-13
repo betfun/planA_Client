@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node ./web.js",
     "dev": "nodemon ./web.js --ignore 'public/*'",
-    "debug": "@powershell -Command $env:DEBUG='prewallet:*';nodemon ./web.js --ignore 'public/*'"
+    "debug": "@powershell -Command $env:DEBUG='planA:*';nodemon ./web.js --ignore 'public/*'"
   },
   "keywords": [],
   "author": "",

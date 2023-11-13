@@ -14,7 +14,7 @@ module.exports = {
   login: (req, res) => {
 
     let path = req.query.path;
-  
+
     if (req.session.logined != undefined && req.session.logined)
       return res.redirect('/');
     else

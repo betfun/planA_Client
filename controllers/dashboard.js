@@ -1,10 +1,11 @@
 const db = require('../db');
 const dbHelpers = require('../helpers/dbHelpers');
-const walletHelpers = require('../helpers/walletHelpers');
 
 //dashboard data 
 exports.dashboard1 = async (req, res, next) => {
 
+  const idx = req.session.idx;
+  const user = await dbHelpers.getOneRow(`SELECT * FROM tb_user WHERE idx = ? limit 1`, [idx]);
   // const balance = await walletHelpers.getBallance();  
   // const amount = await dbHelpers.getUserPayPoint();
   // const withdrawal = await dbHelpers.getOneRow(`SELECT IFNULL(SUM(amount), 0) AS sum FROM withdrawal WHERE approve = 0`);
@@ -28,6 +29,5 @@ exports.dashboard1 = async (req, res, next) => {
   //     list: [user[0], history1[0], history2[0], history3[0]], 
   //     setting: settings});
 
-  res.render('index', 
-    {});
+  res.render('index', {user: user});
 };
