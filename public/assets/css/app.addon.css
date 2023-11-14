@@ -1,0 +1,19 @@
+.container-loading {
+  position: relative;
+  opacity: .7;
+}
+.container-loader {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: var(--app-component-bg);
+  z-index: 1030;
+  -webkit-animation: fadeIn .2s;
+  animation: fadeIn .2s;
+  border-radius: 0 0 4px 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center
+}

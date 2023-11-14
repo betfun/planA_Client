@@ -9,18 +9,20 @@
   <meta content="" name="author" />
 
   <!-- ================== BEGIN core-css ================== -->
-  <link href="../assets/css/vendor.min.css" rel="stylesheet" />
-  <link href="../assets/css/app.min.css" rel="stylesheet" />
+  <link href="/assets/css/vendor.min.css" rel="stylesheet" />
+  <link href="/assets/css/app.min.css" rel="stylesheet" />
+  <link href="/assets/css/app.addon.css" rel="stylesheet" />
   <!-- ================== END core-css ================== -->
 
   <!-- OR without vendor.min.css -->
 
   <!-- ================== BEGIN core-css ================== -->
-  <link href="../assets/plugins/animate.css/animate.min.css" rel="stylesheet" />
-  <link href="../assets/plugins/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet" />
-  <link href="../assets/plugins/jquery-ui-dist/jquery-ui.min.css" rel="stylesheet" />
-  <link href="../assets/plugins/pace-js/themes/black/pace-theme-flash.css" rel="stylesheet" />
-  <link href="../assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+  <link href="/assets/plugins/animate.css/animate.min.css" rel="stylesheet" />
+  <link href="/assets/plugins/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet" />
+  <link href="/assets/plugins/jquery-ui-dist/jquery-ui.min.css" rel="stylesheet" />
+  <link href="/assets/plugins/pace-js/themes/black/pace-theme-flash.css" rel="stylesheet" />
+  <link href="/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+  <link href="/assets/plugins/gritter/css/jquery.gritter.css" rel="stylesheet"/>
   <!-- ================== END core-css ================== -->
 </head>
 
@@ -46,7 +48,7 @@
         
         <div class="navbar-item navbar-user">
           <a href="#" class="navbar-link d-flex align-items-center">
-            <img src="../assets/img/user/user-13.jpg" alt="" />
+            <i class="fas fa-lg fa-fw fa-circle-user me-1"></i>
             <span>
               <span class="d-none d-md-inline">
                 <%=account%>
@@ -70,7 +72,7 @@
         <!-- BEGIN menu -->
         <div class="menu">
           <div class="menu-header"> Navigation</div>
-          <div class="menu-item active">
+          <div class="menu-item">
             <a href="/" class="menu-link">
               <div class="menu-icon"><i class="fa fa-th-large"> </i></div>
               <div class="menu-text"> 메인</div>
@@ -78,22 +80,22 @@
           </div>
 
           <div class="menu-item">
-            <a href="/user/profile" class="menu-link">
-              <div class="menu-icon"><i class="fa fa-th-large"> </i></div>
-              <div class="menu-text"> 정보수정</div>
+            <a href="/user/repassword" class="menu-link">
+              <div class="menu-icon"><i class="fa fa-key"></i></div>
+              <div class="menu-text"> 비밀번호 변경</div>
             </a>
           </div>
 
           <div class="menu-item">
             <a href="javascript:;" class="menu-link">
-              <div class="menu-icon"><i class="fa fa-th-large"> </i></div>
+              <div class="menu-icon"><i class="fa fa-list"> </i></div>
               <div class="menu-text"> 전송내역</div>
             </a>
           </div>
 
           <div class="menu-item">
             <a href="javascript:;" class="menu-link">
-              <div class="menu-icon"><i class="fa fa-th-large"> </i></div>
+              <div class="menu-icon"><i class="fa fa-users"> </i></div>
               <div class="menu-text"> 계보도</div>
             </a>
           </div>

@@ -8,8 +8,7 @@ const { catchErrors } = require('../helpers/errorHandlers');
 /**
  * 회원 정보 수정
  */
-router.get('/profile', catchErrors(userCtlr.getUserInfo));
-// router.post('/profile', catchErrors(userCtlr.modifyUserInfo));
-
+router.get('/repassword', catchErrors(userCtlr.rePassword));
+router.post('/repassword', catchErrors(userCtlr.doRePassword));
 
 module.exports = router;

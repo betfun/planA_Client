@@ -20,8 +20,9 @@ module.exports = {
     else
       return res.render('auth/login', 
         {
-          email: req.cookies['email'], 
-          rememberMe: req.cookies['email'] ? 'on' : '', path
+          account: req.cookies['account'], 
+          rememberMe: req.cookies['account'] ? 'checked' : '',
+          path
         }
       );
   },
@@ -33,7 +34,7 @@ module.exports = {
    */
   procLogin: async (req, res) => {
     const { account, password, rememberMe } = req.body;
-
+    
     let rst = {result:0, msg:''};
   
     try {
@@ -41,10 +42,14 @@ module.exports = {
       if (!account || !password) {
         throw new Error('input your id or password');
       }
-  
-      const rsUser = await dbHelper.getOneRow('SELECT * FROM tb_user WHERE f_email = ? AND f_pwd = ? limit 1', [account, password]);
+
+      // let encrypted = await bcrypt.hash(password, Number(process.env.CRYPTO_ROUND));
+
+      let rsUser = await dbHelper.getOneRow('SELECT * FROM tb_user WHERE f_email = ? limit 1', account);
+   
+      let isCompare = await bcrypt.compare(password, rsUser.f_pwd);
       
-      if (!rsUser) throw new Error('check you id or password');
+      if(!rsUser||!isCompare) throw new Error('아이디, 비밀번호를 확인해주세요.');
       
       // let ipAddress = req.headers['x-forwarded-for']?.split(',').shift() || req.socket?.remoteAddress || '';
       
@@ -68,13 +73,13 @@ module.exports = {
       } else {
         res.clearCookie('account');
       }
-  
+
       rst.result = 100;
+      
     } catch (err) {    
       rst.msg = err.message;
       rst.result = rst.result||500;
     }
-  
     res.json(rst);    
   },
   
@@ -106,7 +111,7 @@ module.exports = {
 
     try {
 
-      let bcompare = await bcrypt.compare(account+process.env.CRYPTO_KEY, token);
+      let bcompare = await bcrypt.compare(account, token);
 
       if (!bcompare) throw new Error('Not equal bcrypt token')
     
@@ -150,7 +155,7 @@ module.exports = {
 
       if (new_password != confirm_password) throw new Error('The password does not match.');
 
-      let bcompare = await bcrypt.compare(account+process.env.CRYPTO_KEY, token);
+      let bcompare = await bcrypt.compare(account, token);
 
       if (!bcompare) throw new Error('Not equal bcrypt token')
 
@@ -204,7 +209,7 @@ module.exports = {
 
       if (rsMailCnt['cnt'] > 5) throw new Error('Exceed 5 of emails sent per day');
 
-      let token = await bcrypt.hash(account+process.env.CRYPTO_KEY, Number(process.env.CRYPTO_ROUND));
+      let token = await bcrypt.hash(account, Number(process.env.CRYPTO_ROUND));
       
       let mailTemp = mailerHelper.templateForgotEmail(rsUser['f_email'], encodeURIComponent(account), encodeURIComponent(token));
 
