@@ -1,6 +1,6 @@
 .container-loading {
   position: relative;
-  opacity: .7;
+  opacity: .3;
 }
 .container-loader {
   position: absolute;
@@ -15,5 +15,5 @@
   border-radius: 0 0 4px 4px;
   display: flex;
   justify-content: center;
-  align-items: center
+  align-items: center;
 }

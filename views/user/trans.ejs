@@ -1,0 +1,90 @@
+<%- include('../header'); %>
+	<!-- BEGIN breadcrumb -->
+	<ol class="breadcrumb float-xl-end">
+		<li class="breadcrumb-item"><a href="javascript:;">Home</a></li>
+		<li class="breadcrumb-item active">전송 내역</li>
+	</ol>
+	<!-- END breadcrumb -->
+	<!-- BEGIN page-header -->
+	<h1 class="page-header mb-3">전송 내역</h1>
+	<!-- END page-header -->
+
+	<div class="row">
+		<div class="col-12">
+			<div class="panel panel-inverse">
+				<div class="panel-heading">
+					<h4 class="panel-title"><i class="fa fa-list me-1"> </i> 전송 내역</h4>
+				</div>
+				<div class="panel-body">
+          <div class="table-responsive">
+            <table class="table dataTable table-striped table-hover table-bordered align-middle">
+              <thead>              
+                <tr class="text-center">
+                  <th class="text-nowrap"></th>
+                  <th class="text-nowrap">구분</th>
+                  <th class="text-nowrap">상태</th>
+                  <th class="text-nowrap">금액</th>
+                  <th class="text-nowrap">수수료</th>
+                  <th class="text-nowrap">주소</th>
+                  <th class="text-nowrap">날짜</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if(!trans || trans.length == 0) {%>
+                <tr>
+                  <td class="text-center h-50px" colspan="7">
+                    데이터가 존재하지 않습니다.
+                  </td>
+                </tr>
+                <% } else {
+                  trans.forEach(function(el, index) {
+                    let type = el.f_type;
+                    let status = el.f_status;
+                    let statusHTML = '';
+                    switch(status) {
+                      case 0:
+                        statusHTML = '<span class="text-danger"><i class="fa fa-pause fa-lg me-1"></i> 대기</span>';
+                        break;
+                      case 1:
+                        statusHTML = '<span class="text-warning"><i class="fas fa-spinner fa-spin fa-lg me-1"></i> 전송</span>';
+                        break;
+                      case 2:
+                        statusHTML = '<span class="text-success"><i class="fas fa-circle-dot fa-lg me-1"></i> 완료</span>';
+                        break;
+                    }
+                    let amount = el.f_amount;
+                    let fee = el.f_fee; 
+                    let token = el.f_token;
+                    let network = el.f_network;
+                    let address = el.f_address;
+                    let regAt = el.f_regAt;
+                  %>
+                  <tr>
+                    <td class="text-center"><%=index+1%></td>
+                    <td class="text-center"><%=type%></td>
+                    <td class="text-center"><%-statusHTML%></td>
+                    <td class="text-end"><%=amount%></td>
+                    <td class="text-end"><%=fee%></td>
+                    <td class="text-end"><span class="badge bg-primary"><%=token%></span><span class="badge bg-success ms-2"><%=network%></span><br><%=address%></td>
+                    <td class="text-center"><%=regAt%></td>
+                  </tr>
+                  <% }) %>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
+          <div class="row pt-2">
+            <div class="col-sm-5">
+         
+            </div>
+            <div class="col-sm-7">
+              
+            </div>
+          </div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<%- include('../footer'); %>

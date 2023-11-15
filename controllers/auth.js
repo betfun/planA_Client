@@ -46,10 +46,14 @@ module.exports = {
       // let encrypted = await bcrypt.hash(password, Number(process.env.CRYPTO_ROUND));
 
       let rsUser = await dbHelper.getOneRow('SELECT * FROM tb_user WHERE f_email = ? limit 1', account);
-   
+
+      if(!rsUser) throw new Error('아이디 또는 비밀번호를 확인해주세요.');
+
       let isCompare = await bcrypt.compare(password, rsUser.f_pwd);
       
-      if(!rsUser||!isCompare) throw new Error('아이디, 비밀번호를 확인해주세요.');
+      if(!isCompare) throw new Error('아이디 또는 비밀번호를 확인해주세요.');
+
+      //비밀번호 x번 실패시 이메일 인증
       
       // let ipAddress = req.headers['x-forwarded-for']?.split(',').shift() || req.socket?.remoteAddress || '';
       

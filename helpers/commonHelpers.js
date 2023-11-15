@@ -3,27 +3,21 @@ const url = require('url');
  * check authorized
  * @returns 
  */
-exports.isAuthorized = async (req, res, next) => {
-
+exports.isAuthorized = (req, res, next) => {  
   if (!req.session || !req.session.logined) {
-
     if (req.xhr) {
       return res.json({
-        result: 102, 
-        msg:'Please log in',
+        result:102, 
+        msg:'로그인이 필요한 서비스입니다',
         rUrl: `/auth/login`
       });
     } else {
-      let re = url.parse(req.url).pathname;
-      let msg = req.query.msg || '';
-      res.redirect(`/auth/login?path=${re}&msg=${msg}`);
+      res.redirect(`/auth/login?path=${req.originalUrl}`);
       return;
     }
   }
-  
   res.locals.email = req.session.f_email;
   res.locals.account = req.session.account;
-
   return next();
 }
 

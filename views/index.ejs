@@ -24,7 +24,6 @@
               </div>
               <div class="text-start">
                 <div>
-                  
                   <h5 class="mt-2 mb-2">
                     <%=user.f_email%>
                   </h5>
@@ -34,15 +33,21 @@
                 </h5>
               </div>
             </div>
+            <div class="row text-truncate">
+              <div class="col">
+                <div>Total Balance</div>
+                <div class="fs-20px mb-5px fw-bold text-green">$<span data-animation="number" data-value="<%=wallet.f_balance%>"><%=wallet.f_balance%></span></div>
+              </div>
+            </div>
             <hr class="bg-white bg-opacity-50">
             <div class="row text-truncate">
               <div class="col-6">
                 <div>누적 수수료</div>
-                <div class="fs-18px mb-5px fw-bold text-success">$<span data-animation="number" data-value="<%=user.f_sumfee%>"><%=user.f_sumfee%></span></div>
+                <div class="fs-18px mb-5px fw-bold text-green">$<span data-animation="number" data-value="<%=user.f_sumfee%>"><%=user.f_sumfee%></span></div>
               </div>
               <div class="col-6">
                 <div>롤업 커미션</div>
-                <div class="fs-18px mb-5px fw-bold text-success">$<span data-animation="number" data-value="<%=user.f_sumcoms%>"><%=user.f_sumcoms%></span></div>
+                <div class="fs-18px mb-5px fw-bold text-green">$<span data-animation="number" data-value="<%=user.f_sumcoms%>"><%=user.f_sumcoms%></span></div>
               </div>
             </div>
           </div>
@@ -61,7 +66,7 @@
             userStatus.text('미등록');
             break;
           case 1:
-            userStatus.addClass('bg-success');
+            userStatus.addClass('bg-green');
             userStatus.text('활성');
             break;
           case 2:

@@ -35,7 +35,7 @@ let pwUtils = {
   },
   //Ajax file Json
   ajaxFileJSON: function (url, data, sCallback, modal, sError) {
-    if (typeof $ === 'function') {      
+    if (typeof $ === 'function') {
       if (typeof modal !== 'undefined') modal.modal('show');
       $.ajax({
         url: url,
@@ -74,7 +74,7 @@ let pwUtils = {
   },
   validateEmail: (_v) => {
     const patternEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
-    if (!_v ) {
+    if (!_v) {
       pwUtils.setAlert("Email" + "Please input");
       return false
     }
@@ -88,19 +88,36 @@ let pwUtils = {
     var num = password.search(/[0-9]/g);
     var eng = password.search(/[a-zA-Z]/ig);
     //var spe = password.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
-  
-    if(password.length < 8 || password.length > 20) {     
+
+    if (password.length < 8 || password.length > 20) {
       pwUtils.setAlert("* Please enter between 8 and 20 digits.");
       return false;
-    } else if(password.search(/\s/) != -1) {
+    } else if (password.search(/\s/) != -1) {
       pwUtils.setAlert("Please enter the password without spaces.");
       return false;
-    } else if(num < 0 || eng < 0) {        
+    } else if (num < 0 || eng < 0) {
       pwUtils.setAlert("Please use the mixture of English, numbers, and special characters.");
       return false;
-    } 
-      
-    return true;    
+    }
+
+    return true;
+  },
+  validateTRC20Address: async (address) => {
+    const options = {
+      method: 'POST',
+      headers: { accept: 'application/json', 'content-type': 'application/json' },
+      body: JSON.stringify({ address: address, visible: true })
+    };
+
+    try {
+      let rs = await fetch('https://api.shasta.trongrid.io/wallet/validateaddress', options)
+      let data = await rs.json();
+      return data;
+    } catch (err) {
+      console.error(err);
+      return {result: false, message: "서버 오류입니다."};
+    }
+
   },
   setLocale: (locale, thiz) => {
     savedLocale = locale;
@@ -140,7 +157,7 @@ let pwUtils = {
       class_name: 'my-sticky-class',
     });
   },
-  setNotice: (_title, _content, _link, _id, ) => {
+  setNotice: (_title, _content, _link, _id,) => {
     if (typeof $ != 'function') return;
 
     let pwCookie = pwUtils.getCookie(`pwAnnounce_${_id}`);
@@ -149,13 +166,13 @@ let pwUtils = {
 
     $('.announcement-backdrop').show();
     $('body').css('overflow', 'hidden');
-    
+
     if ($('.ofBar-area').length == 0) {
       $('body').append('<div class="ofBar-area"></div>');
     }
 
     let txtOneDay = 'Not showing on Today';
-    let idnotshowme = 'notshowme'+_id;
+    let idnotshowme = 'notshowme' + _id;
 
     _content = _content.replace(/\r\n/g, '<br/>');
 
@@ -191,7 +208,7 @@ let pwUtils = {
       let notshowme = ofBar.find('input[name=notshowme]');
 
       if (notshowme.is(":checked")) {
-        pwUtils.setCookie(`pwAnnounce_${_id}`, 'y', 1);  
+        pwUtils.setCookie(`pwAnnounce_${_id}`, 'y', 1);
       }
 
       ofBar.remove();
@@ -201,16 +218,16 @@ let pwUtils = {
       if ($('.ofBar').length == 0) {
         $('.ofBar-area').remove();
         $('.announcement-backdrop').hide();
-        $('body').css('overflow', 'auto');        
+        $('body').css('overflow', 'auto');
       }
     });
 
     $('.ofBar-area').append(ofBar);
   },
-  swalSuccess: function(_text, _cb) {    
+  swalSuccess: function (_text, _cb) {
     swal({
       title: 'Succeded',
-      text: _text??'',
+      text: _text ?? '',
       icon: 'success',
       buttons: {
         cancel: {
@@ -222,16 +239,16 @@ let pwUtils = {
         },
       }
     }).then(() => {
-      if (typeof _cb === 'function') {            
+      if (typeof _cb === 'function') {
         _cb();
       }
     });
-  },  
+  },
   //Message alert
-  swalFailed: function(_text, _cb) {
+  swalFailed: function (_text, _cb) {
     swal({
       title: 'Failed',
-      text: _text??'',
+      text: _text ?? '',
       icon: 'error',
       buttons: {
         cancel: {
@@ -243,16 +260,16 @@ let pwUtils = {
         },
       }
     }).then(() => {
-      if (typeof _cb === 'function') {            
+      if (typeof _cb === 'function') {
         _cb();
       }
-    });    
-  },   
+    });
+  },
   //Message Confirm alert 
-  swalConfirm: function(_title, _text, _cb) {
+  swalConfirm: function (_title, _text, _cb) {
     swal({
-      title: _title??'정말 처리하겠습니까?',
-      text: _text??'',
+      title: _title ?? '정말 처리하겠습니까?',
+      text: _text ?? '',
       icon: 'warning',
       buttons: {
         cancel: {
@@ -271,19 +288,19 @@ let pwUtils = {
         }
       }
     }).then((v) => {
-      if (typeof _cb === 'function' && v) {            
+      if (typeof _cb === 'function' && v) {
         _cb();
       }
-    });    
-  },  
-  simpleLightbox: function (imageUrl, bgColor, maxWidth){
-      if(typeof bgColor === 'undefined'){
-          bgColor = '#000';
-      }
-      if(typeof maxWidth === 'undefined'){
-          maxWidth = '1100px';
-      }
-      window.open('', 'simpleLightbox').document.write('<html><head><meta name="viewport" content="user-scalable=yes, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, width=device-width" /></head><body style="margin:0;'+bgColor+';height:100%;" onclick="javascript:window.close(\'simpleLightbox\');"><table border="0" width="100%" height="100%"><tr><td valign="middle" align="center"><img style="position:relative;z-index:2;width:100%;max-width:'+maxWidth+';" src="'+imageUrl+'"/></td></tr></table></body></html>');
+    });
+  },
+  simpleLightbox: function (imageUrl, bgColor, maxWidth) {
+    if (typeof bgColor === 'undefined') {
+      bgColor = '#000';
+    }
+    if (typeof maxWidth === 'undefined') {
+      maxWidth = '1100px';
+    }
+    window.open('', 'simpleLightbox').document.write('<html><head><meta name="viewport" content="user-scalable=yes, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, width=device-width" /></head><body style="margin:0;' + bgColor + ';height:100%;" onclick="javascript:window.close(\'simpleLightbox\');"><table border="0" width="100%" height="100%"><tr><td valign="middle" align="center"><img style="position:relative;z-index:2;width:100%;max-width:' + maxWidth + ';" src="' + imageUrl + '"/></td></tr></table></body></html>');
   },
   setFormatNumber: function (_x) {
     let parts = _x.toString().split('.');
@@ -291,28 +308,28 @@ let pwUtils = {
     return parts.join('.');
   },
   //Form to FormData
-  makeFormData: function(form, withFile) {
+  makeFormData: function (form, withFile) {
     var formData = new FormData();
 
-    form.find('input, select, textarea, radio, checkbox').each(function(k, v) {
+    form.find('input, select, textarea, radio, checkbox').each(function (k, v) {
       if (v.type == 'file' && withFile == true) {
         for (var x = 0; x < v.files.length; x++) {
           formData.append(v.name, v.files[x]);
-        }      
+        }
       } else if (v.type == 'radio' || v.type == 'checkbox') {
         if (v.checked) formData.append(v.name, v.value);
       } else {
-        formData.append(v.name, v.value);        
+        formData.append(v.name, v.value);
       }
     });
 
     return formData;
   },
-  showFormData: function(fd) {
-    for (let pair of fd.entries()) { 
-      console.log(pair[0]+ ', ' + pair[1]); 
+  showFormData: function (fd) {
+    for (let pair of fd.entries()) {
+      console.log(pair[0] + ', ' + pair[1]);
     }
-  },  
+  },
   /**
    * Change the number in a given format with
    * @param {Number} _x
@@ -361,7 +378,7 @@ let pwUtils = {
   /* hide Loading bootstrap */
   hideLoading: function (target) {
     if (!target) {
-      target = $("."+pwUtils.preset.loader.body)[0];
+      target = $("." + pwUtils.preset.loader.body)[0];
       if (target) {
         /*
         $(target.querySelector('.' + pwUtils.preset.loader.class)).fadeOut(1000, () => {
@@ -369,8 +386,8 @@ let pwUtils = {
         });        
         */
         target.querySelector('.' + pwUtils.preset.loader.class).remove();
-        
-        target.classList.remove(pwUtils.preset.loader.body);      
+
+        target.classList.remove(pwUtils.preset.loader.body);
       }
     } else if (target.classList.contains(pwUtils.preset.loader.body)) {
       target.querySelector('.' + pwUtils.preset.loader.class).remove();
@@ -379,10 +396,10 @@ let pwUtils = {
   },
   setCookie: function (cookie_name, value, days) {
     var exdate = new Date();
-    exdate.setDate(exdate.getDate() + days);    
+    exdate.setDate(exdate.getDate() + days);
     var cookie_value = escape(value) + ((days == null) ? '' : ';expires=' + exdate.toUTCString());
     document.cookie = cookie_name + '=' + cookie_value;
-},
+  },
   getCookie: function (cookieName) {
     var cookieValue = null;
     if (document.cookie) {
@@ -410,117 +427,117 @@ let pwUtils = {
 };
 
 var modalUtils = {
-	show : function(id, title, content, caption1, fnc1, caption2, fnc2, shownfnc) {
+  show: function (id, title, content, caption1, fnc1, caption2, fnc2, shownfnc) {
 
-		if (typeof title != "undefined") this.setTitle(id, title);
-		if (typeof content != "undefined") 
+    if (typeof title != "undefined") this.setTitle(id, title);
+    if (typeof content != "undefined")
       this.setContent(id, content);
     else
       this.showOverlay(id);
-		if (typeof caption1 != "undefined") {
-			$(id).find('.close-button').text(caption1);			
-		} else {
-			$(id).find('.close-button').text('닫기');
-		}
-		
-		if (caption2 == true) {
-			this.showButton(id);
-		} else if (typeof caption2 == "string") {
-			this.showButton(id, caption2);
-		} else {
-			this.hideButton(id);
-		}
-		
-		$(id).find('.close-button, .ico-close-button').off("click");
-
-		if (typeof fnc1 == "function")
-			$(id).find('.close-button, .ico-close-button').on("click", fnc1);
-		else {
-			$(id).find('.close-button, .ico-close-button').on("click", function(){
-				modalUtils.hide(id);
-			});
+    if (typeof caption1 != "undefined") {
+      $(id).find('.close-button').text(caption1);
+    } else {
+      $(id).find('.close-button').text('닫기');
     }
-		
+
+    if (caption2 == true) {
+      this.showButton(id);
+    } else if (typeof caption2 == "string") {
+      this.showButton(id, caption2);
+    } else {
+      this.hideButton(id);
+    }
+
+    $(id).find('.close-button, .ico-close-button').off("click");
+
+    if (typeof fnc1 == "function")
+      $(id).find('.close-button, .ico-close-button').on("click", fnc1);
+    else {
+      $(id).find('.close-button, .ico-close-button').on("click", function () {
+        modalUtils.hide(id);
+      });
+    }
+
     $(id).find('.modal-button').off('click');
 
-		if (typeof fnc2 == "function")
-			$(id).find('.modal-button').on("click", fnc2);
-		else 
-			$(id).find('.modal-button').on("click", function(){
-				modalUtils.hide(id);
-			});
+    if (typeof fnc2 == "function")
+      $(id).find('.modal-button').on("click", fnc2);
+    else
+      $(id).find('.modal-button').on("click", function () {
+        modalUtils.hide(id);
+      });
 
-		$(id).modal('show'); 		
+    $(id).modal('show');
 
     $(id).off('shown.bs.modal');
 
     if (typeof shownfnc == "function") {
       $(id).on('shown.bs.modal', shownfnc);
     }
-	},
-  showPasswd : function(procFunc) {
+  },
+  showPasswd: function (procFunc) {
 
     let id = '#modal-password';
 
     $(id).find('.modal-button').off("click");
 
     if (typeof procFunc == "function")
-      modalUtils.setButton(id, procFunc);      
-    else 
+      modalUtils.setButton(id, procFunc);
+    else
       modalUtils.setButton(id, () => {
         modalUtils.hide(id);
       });
 
     $(id).modal('show')
-	},
-  hidestay : function(id) {
-		$(id).modal('hide');
+  },
+  hidestay: function (id) {
+    $(id).modal('hide');
     this.hideOverlay(id);
   },
-	hide : function(id) {
-		$(id).modal('hide');
+  hide: function (id) {
+    $(id).modal('hide');
     this.hideOverlay(id);
     this.setContent(id, '');
-	},
-  close : function(id) {
+  },
+  close: function (id) {
     $(id).find('.close-button').trigger("click");
   },
-	setTitle : function(id, title) {		
-		$(id).find('.modal-title').html(title);
-	},
-	setContent : function(id, content) {
-		$(id).find('.modal-body').html(content);
+  setTitle: function (id, title) {
+    $(id).find('.modal-title').html(title);
+  },
+  setContent: function (id, content) {
+    $(id).find('.modal-body').html(content);
     this.hideOverlay(id);
-	},
-	showButton : function(id, caption) {
-		if (typeof caption != "undefined")
-			$(id).find('.modal-button').text(caption);
-		else 
-			$(id).find('.modal-button').text("적용");
-		$(id).find('.modal-button').show();
-	},
-	hideButton : function(id) {
-		$(id).find('.modal-button').hide();
-	}, 
-	setButton : function(id, fnc) {
-		$(id).find('.modal-button').off("click");
-		$(id).find('.modal-button').on("click", fnc);
-	},
-  setCloseButton : function(id, fnc) {    
+  },
+  showButton: function (id, caption) {
+    if (typeof caption != "undefined")
+      $(id).find('.modal-button').text(caption);
+    else
+      $(id).find('.modal-button').text("적용");
+    $(id).find('.modal-button').show();
+  },
+  hideButton: function (id) {
+    $(id).find('.modal-button').hide();
+  },
+  setButton: function (id, fnc) {
+    $(id).find('.modal-button').off("click");
+    $(id).find('.modal-button').on("click", fnc);
+  },
+  setCloseButton: function (id, fnc) {
     $(id).find('.close-button, .ico-close-button').on("click", fnc);
   },
-	disableButton : function(id) {
+  disableButton: function (id) {
     $(id).find('.ico-close-button').prop("disabled", true);
     $(id).find('.close-button').prop("disabled", true);
-		$(id).find('.modal-button').prop("disabled", true);
-	},
-	enableButton : function(id) {
+    $(id).find('.modal-button').prop("disabled", true);
+  },
+  enableButton: function (id) {
     $(id).find('.ico-close-button').prop("disabled", false);
     $(id).find('.close-button').prop("disabled", false);
-		$(id).find('.modal-button').prop("disabled", false);
-	},
-  showOverlay : function(id, fade) {
-    $(id).find('.overlay').show().addClass('d-flex');    
+    $(id).find('.modal-button').prop("disabled", false);
+  },
+  showOverlay: function (id, fade) {
+    $(id).find('.overlay').show().addClass('d-flex');
     /*
     if (fade == undefined)
       $(id).find('.overlay').show().addClass('d-flex');    
@@ -529,36 +546,36 @@ var modalUtils = {
     }
     */
   },
-  hideOverlay : function(id, fade) {
+  hideOverlay: function (id, fade) {
     if (fade == undefined)
       $(id).find('.overlay').hide().removeClass('d-flex');
     else
-      $(id).find('.overlay').fadeOut(400, function() {$(id).find('.overlay').removeClass('d-flex')});
+      $(id).find('.overlay').fadeOut(400, function () { $(id).find('.overlay').removeClass('d-flex') });
   },
-  showConfirm : function(title, callback) {
+  showConfirm: function (title, callback) {
     if (title == undefined) title = '수정하시겠습니까?';
     this.showmin('#modal-sm', '<i class="fas fa-cogs text-danger"></i> 알림', title, '아니요', '', '예', callback);
   },
-  hideConfirm : function() {
+  hideConfirm: function () {
     this.hide('#modal-sm');
   },
-	showAlert : function(id, msg, autoClose) {
-		
-		$(id).find('.modal-alertmsg').text(msg);
-		
-		if (autoClose == true) {
-			$(id).find('.modal-alert').fadeTo(4000, 500).slideUp(500, function () {
-				$(id).find('.modal-alert').slideUp(500);
-			});				
-		} else {
-			$(id).find('.modal-alert').show();
-		}
-			
-	},
-	hideAlert : function(id) {
-		$(id).find('.modal-alert').hide();
-	},
-  getModalId : function(obj) {
-    return '#'+$(obj).parents(".modal").attr("id");
+  showAlert: function (id, msg, autoClose) {
+
+    $(id).find('.modal-alertmsg').text(msg);
+
+    if (autoClose == true) {
+      $(id).find('.modal-alert').fadeTo(4000, 500).slideUp(500, function () {
+        $(id).find('.modal-alert').slideUp(500);
+      });
+    } else {
+      $(id).find('.modal-alert').show();
+    }
+
+  },
+  hideAlert: function (id) {
+    $(id).find('.modal-alert').hide();
+  },
+  getModalId: function (obj) {
+    return '#' + $(obj).parents(".modal").attr("id");
   },
 }

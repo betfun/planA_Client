@@ -2,7 +2,10 @@
 const express = require('express');
 const router = express.Router();
 
+const commonCtlr = require('../controllers/common');
 const userCtlr = require('../controllers/user');
+const tranCtlr = require('../controllers/trans');
+
 const { catchErrors } = require('../helpers/errorHandlers');
 
 /**
@@ -10,5 +13,9 @@ const { catchErrors } = require('../helpers/errorHandlers');
  */
 router.get('/repassword', catchErrors(userCtlr.rePassword));
 router.post('/repassword', catchErrors(userCtlr.doRePassword));
+router.post('/doEditWallet', catchErrors(userCtlr.doEditWallet));
 
+router.get('/trans', catchErrors(tranCtlr.getTrans));
+
+router.get('/tree', catchErrors(userCtlr.getTree));
 module.exports = router;
