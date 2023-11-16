@@ -424,6 +424,18 @@ let pwUtils = {
       html: '<span class="spinner spinner-sm"></span>',
     },
   },
+  /* move page */
+  page_move: function(page)
+  {
+    $("#listForm")[0].s_page.value = page;   
+    this.page_link();
+  },
+  /* reload page */
+  page_link: function()
+  {    
+    $("#listForm")[0].action = window.location.pathname;
+    $("#listForm")[0].submit();
+  },
 };
 
 var modalUtils = {
