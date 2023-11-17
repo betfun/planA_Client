@@ -18,45 +18,77 @@
 						</span></h4>
 				</div>
 				<div class="panel-body">
-					<!-- html -->
-					<div id="jstree-default">
-						<ul>
-							<li data-jstree='{"opened":true}'>
-								Root node 1
-								<ul>
-									<li data-jstree='{"opened":true, "selected":true }'>Initially Selected</li>
-									<li>Folder 1</li>
-								</ul>
-							</li>
-						</ul>
-					</div>
 					<% if(!tree || tree.length==0) { %>
 						<div>데이터가 없습니다</div>
-						<%} else { tree.forEach(function(e, i) { let email=e.f_email; %>
-							<%=email%>
-								<%})%>
-									<%}%>
-
+						<%} else { %>
+							<div class="input-group mb-3">
+								<input type="text" id="nodeSearch" class="form-control" placeholder="Search">
+								<button type="button" id="nodeSearchBtn" class="btn btn-outline-secondary" onclick="nodeSearch()"><i class="fa-solid fa-magnifying-glass me-1"></i>검색</button>
+							</div>
+							<div id="jstree"></div>
+							<% } %>
 				</div>
 			</div>
 		</div>
 	</div>
-	<!-- required files -->
-	<link href="/assets/plugins/jstree/style.min.css" rel="stylesheet" />
-	<script src="/assets/plugins/jstree/jstree.min.js"></script>
-
 
 
 	<script>
-		$("#jstree-default").jstree({
-			"plugins": ["types"],
-			"core": {
-				"themes": { "responsive": false }
-			},
-			"types": {
-				"default": { "icon": "fa fa-folder text-warning fa-lg" },
-				"file": { "icon": "fa fa-file text-dark fa-lg" }
+		const data = <%- JSON.stringify(tree) %>;
+		let userIdx = <%=userIdx%>;
+		let indexArray = [];
+		let nodes = {};
+		data.forEach((e, i) => {
+			indexArray[e.idx] = i;
+			data[i]['children'] = [];
+		});
+
+		data.forEach( (e, i) => {
+			let node = {
+				id: e.idx,
+				text: e.f_email,
+				//icon        : "string" // string for custom
+				state: {
+					opened: true  // is the node open
+					// disabled  : boolean  // is the node disabled
+					// selected  : boolean  // is the node selected
+				},
+				children: e.children,  // array of strings or objects
+				// li_attr     : {},  // attributes for the generated LI node
+				// a_attr      : {},  // attributes for the generated A node
+			}
+
+			if (userIdx != e.idx) {
+				data[indexArray[e.f_pIdx]]['children'].push(node);
+			} else {
+				nodes = node;
 			}
 		});
+
+		window.addEventListener('DOMContentLoaded', (event) => {
+			$("#jstree").jstree({
+				"plugins": [
+					"search", "types",
+				],
+				"core": {
+					"themes": { 
+						"responsive": false,
+						"icons": true,
+					 },
+					"data": nodes,
+				},
+				"types": {
+					"default": { 
+						"icon": "fa fa-user text-warning fa-lg",
+					},
+				}
+			});	
+		});
+
+		function nodeSearch() {
+			var v = $('#nodeSearch').val();
+			$("#jstree").jstree(true).search(v);
+		}
+		
 	</script>
 	<%- include('../footer'); %>

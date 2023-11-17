@@ -99,9 +99,10 @@ exports.doEditWallet = async (req, res) => {
  */
 exports.getTree = async (req, res) => {
   let idx = req.session.idx;
+ 
   const tree = await dbHelper.getRows(`
-      SELECT * FROM tb_user
-      WHERE f_referral = ? `, [idx]);
+      SELECT * FROM tb_node N LEFT JOIN tb_user U ON N.f_useridx = U.idx
+      WHERE f_node LIKE "%:?:%" ORDER BY N.f_level DESC`, [idx]);
 
-  res.render('user/tree', {tree: tree ?? {}});
+  res.render('user/tree', {tree: tree ?? {}, userIdx: idx});
 }

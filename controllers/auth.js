@@ -52,21 +52,19 @@ module.exports = {
       let isCompare = await bcrypt.compare(password, rsUser.f_pwd);
       
       if(!isCompare) throw new Error('아이디 또는 비밀번호를 확인해주세요.');
-
-      //비밀번호 x번 실패시 이메일 인증
       
-      // let ipAddress = req.headers['x-forwarded-for']?.split(',').shift() || req.socket?.remoteAddress || '';
+      let ipAddress = req.headers['x-forwarded-for']?.split(',').shift() || req.socket?.remoteAddress || '';
       
-      // if (ipAddress.startsWith('::ffff:')) {ipAddress = ipAddress.substring(7)}    
+      if (ipAddress.startsWith('::ffff:')) {ipAddress = ipAddress.substring(7)}    
   
-      // let refererSite = req.header("Referrer") || "";
-      // let userAgent = req.headers["user-agent"] ?
-      //   req.headers["user-agent"] :
-      //   "jest-test";    
+      let refererSite = req.header("Referrer") || "";
+      let userAgent = req.headers["user-agent"] ?
+        req.headers["user-agent"] :
+        "jest-test";    
   
-      // param = [rsAdmin.id, ipAddress, userAgent, refererSite];
+      param = [rsUser.idx, ipAddress, userAgent, refererSite];
   
-      // await dbHelper.exeQuery('insert into userloggedlog (userId, ip, userAgent, refererSite) values (?, ?, ?, ?)', param);
+      await dbHelper.exeQuery('insert into tb_user_log (f_userIdx, f_ip, f_userAgent, f_refererSite) values (?, ?, ?, ?)', param);
   
       req.session.logined = true;
       req.session.idx = rsUser.idx;
@@ -221,16 +219,11 @@ module.exports = {
 
       if (!rsInfo) throw new Error('Error, Check SMTP(Email) System');
 
-      // let ipAddress = req.headers['x-forwarded-for']?.split(',').shift() || req.socket?.remoteAddress || '';
+      let ipAddress = req.headers['x-forwarded-for']?.split(',').shift() || req.socket?.remoteAddress || '';
       
-      // if (ipAddress.startsWith('::ffff:')) {ipAddress = ipAddress.substring(7)}    
+      if (ipAddress.startsWith('::ffff:')) {ipAddress = ipAddress.substring(7)}    
 
-      // let refererSite = req.header("Referrer") || "";
-      // let userAgent = req.headers["user-agent"] ?
-      //   req.headers["user-agent"] :
-      //   "jest-test"; 
-
-      // dbHelper.exeQuery('insert into resetpasswd (email, token, ip) values( ?, ?, ?)', [email, token, ipAddress]);
+      dbHelper.exeQuery('insert into tb_resetpasswd (f_account, f_token, f_ip) values( ?, ?, ?)', [email, token, ipAddress]);
 
       rst.result = 100;
 
