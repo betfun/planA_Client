@@ -7,6 +7,7 @@ exports.dashboard1 = async (req, res, next) => {
   const idx = req.session.idx;
   const user = await dbHelpers.getOneRow(`SELECT * FROM tb_user WHERE idx = ? limit 1`, [idx]);
   const wallet = await dbHelpers.getOneRow(`SELECT * FROM tb_wallet WHERE f_useridx = ? limit 1`, [idx]);
+  const referralCnt = await dbHelpers.getOneRow(`SELECT COUNT(1) AS count  FROM tb_user WHERE f_referral = ? limit 1`, [idx]);
 
   // const balance = await walletHelpers.getBallance();  
   // const amount = await dbHelpers.getUserPayPoint();
@@ -31,5 +32,5 @@ exports.dashboard1 = async (req, res, next) => {
   //     list: [user[0], history1[0], history2[0], history3[0]], 
   //     setting: settings});
 
-  res.render('index', {user: user ?? {}, wallet: wallet ?? {}});
+  res.render('index', {user: user ?? {}, wallet: wallet ?? {}, referralCnt: referralCnt['count'] ?? 0});
 };
