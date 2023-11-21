@@ -5,7 +5,7 @@
 
 <!-- ================== BEGIN core-js ================== -->
 <script src="/assets/js/vendor.min.js" type="text/javascript"></script>
-<script src="/assets/js/app.min.js" type="text/javascript"></script>
+<script src="/assets/js/app.js" type="text/javascript"></script>
 <!-- ================== END core-js ================== -->
 
 <!-- OR without vendor.min.js -->
@@ -24,17 +24,6 @@
 <script src="/assets/js/common.js?v=<%=Date.now()%>"></script>
 <!-- ================== END core-js ================== -->
 
-<script>
-
-
-  $('.menu-link').each((i, v) => {
-    const t = $(v);
-    if (t.attr('href') == window.location.pathname + window.location.search)
-      t.parent().addClass('active');
-    if (t.attr('link') && t.attr('link').split(',').includes(window.location.pathname + window.location.search))
-      t.parent().addClass('active');
-  });      
-</script>
 </body>
 
 </html>

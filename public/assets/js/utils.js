@@ -33,45 +33,6 @@ let pwUtils = {
       });
     } else console.log('jQuery undefined');
   },
-  //Ajax file Json
-  ajaxFileJSON: function (url, data, sCallback, modal, sError) {
-    if (typeof $ === 'function') {
-      if (typeof modal !== 'undefined') modal.modal('show');
-      $.ajax({
-        url: url,
-        data: data,
-        type: 'POST',
-        processData: false,
-        contentType: false,
-        cache: false,
-        //success: typeof sCallback === 'function'?sCallback:function(dt) {console.log(dt)},
-        success: function (dt) {
-          if (dt.result == '102') {
-            alert(dt.msg);
-            document.location.href = dt.rUrl;
-          } else {
-            if (typeof sCallback === 'function') {
-              sCallback(dt);
-            } else {
-              console.log(dt);
-            }
-          }
-        },
-        complete: function () {
-          if (typeof modal !== 'undefined') modal.modal('hide');
-        },
-        error: function (j, s, e) {
-          if (typeof sError !== 'function') {
-            console.log(
-              'code:' + j.status + '\n' + 'message:' + j.responseText + '\n' + 'error:' + e
-            );
-          } else {
-            sError(j);
-          }
-        },
-      });
-    } else console.log('jQuery undefined');
-  },
   validateEmail: (_v) => {
     const patternEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
     if (!_v) {
@@ -119,11 +80,6 @@ let pwUtils = {
     }
 
   },
-  setLocale: (locale, thiz) => {
-    savedLocale = locale;
-    renderText();
-    $('#dropdownMenuButton').html(thiz.innerHTML);
-  },
   setAlert: (_text, _title) => {
     if (typeof $ != 'function' && typeof $.gritter != 'object') {
       alert(_text);
@@ -156,73 +112,6 @@ let pwUtils = {
       // (string | optional) the class name you want to apply to that specific message
       class_name: 'my-sticky-class',
     });
-  },
-  setNotice: (_title, _content, _link, _id,) => {
-    if (typeof $ != 'function') return;
-
-    let pwCookie = pwUtils.getCookie(`pwAnnounce_${_id}`);
-
-    if (pwCookie) return;
-
-    $('.announcement-backdrop').show();
-    $('body').css('overflow', 'hidden');
-
-    if ($('.ofBar-area').length == 0) {
-      $('body').append('<div class="ofBar-area"></div>');
-    }
-
-    let txtOneDay = 'Not showing on Today';
-    let idnotshowme = 'notshowme' + _id;
-
-    _content = _content.replace(/\r\n/g, '<br/>');
-
-    let ofBar = $(`
-    <div class="ofBar">
-      <div class="ofBar-content">
-        <h5 class="ofBar-title"><img src="/plugins/gritter/images/notice.png"> ${_title}.</h5>      
-        <div class="ofBar-body">${_content}</div>
-      </div>
-      <div class="ofBar-bottom">
-        <div class="col-6">
-          <div class="form-check form-switch d-flex ">
-            <input class="form-check-input" type="checkbox" name="notshowme" id="${idnotshowme}">
-            <label class="form-check-label mb-0 ms-3" for="${idnotshowme}">${txtOneDay}</label>
-          </div>
-        </div>
-        <div class="col-6 text-end">
-          <a href="javascript:;" class="ofBar-btn">View</a>
-          <a href="javascript:;" class="ofBar-close-btn">x</a>
-        </div>
-      </div>
-    </div>    
-    `);
-
-    ofBar.find('.ofBar-btn').on('click', (e) => {
-      location.href = '/announcements';
-    });
-
-    ofBar.find('.ofBar-close-btn').on('click', (e) => {
-
-      let ofBar = $(e.target).parents('.ofBar');
-
-      let notshowme = ofBar.find('input[name=notshowme]');
-
-      if (notshowme.is(":checked")) {
-        pwUtils.setCookie(`pwAnnounce_${_id}`, 'y', 1);
-      }
-
-      ofBar.remove();
-
-      //pwUtils.deleteCookie(`pwAnnounce_${_id}`);
-
-      if ($('.ofBar').length == 0) {
-        $('.ofBar-area').remove();
-        $('.announcement-backdrop').hide();
-        $('body').css('overflow', 'auto');
-      }
-    });
-
-    $('.ofBar-area').append(ofBar);
   },
   swalSuccess: function (_text, _cb) {
     swal({
@@ -293,42 +182,10 @@ let pwUtils = {
       }
     });
   },
-  simpleLightbox: function (imageUrl, bgColor, maxWidth) {
-    if (typeof bgColor === 'undefined') {
-      bgColor = '#000';
-    }
-    if (typeof maxWidth === 'undefined') {
-      maxWidth = '1100px';
-    }
-    window.open('', 'simpleLightbox').document.write('<html><head><meta name="viewport" content="user-scalable=yes, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, width=device-width" /></head><body style="margin:0;' + bgColor + ';height:100%;" onclick="javascript:window.close(\'simpleLightbox\');"><table border="0" width="100%" height="100%"><tr><td valign="middle" align="center"><img style="position:relative;z-index:2;width:100%;max-width:' + maxWidth + ';" src="' + imageUrl + '"/></td></tr></table></body></html>');
-  },
   setFormatNumber: function (_x) {
     let parts = _x.toString().split('.');
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     return parts.join('.');
-  },
-  //Form to FormData
-  makeFormData: function (form, withFile) {
-    var formData = new FormData();
-
-    form.find('input, select, textarea, radio, checkbox').each(function (k, v) {
-      if (v.type == 'file' && withFile == true) {
-        for (var x = 0; x < v.files.length; x++) {
-          formData.append(v.name, v.files[x]);
-        }
-      } else if (v.type == 'radio' || v.type == 'checkbox') {
-        if (v.checked) formData.append(v.name, v.value);
-      } else {
-        formData.append(v.name, v.value);
-      }
-    });
-
-    return formData;
-  },
-  showFormData: function (fd) {
-    for (let pair of fd.entries()) {
-      console.log(pair[0] + ', ' + pair[1]);
-    }
   },
   /**
    * Change the number in a given format with
@@ -436,72 +293,136 @@ let pwUtils = {
     $("#listForm")[0].action = window.location.pathname;
     $("#listForm")[0].submit();
   },
+  userStatus: function(status) {
+    let userStatus = $('.user-status');
+    //(0 : 미등록, 1: 활성, 2:비활성, 90:탈퇴)
+    switch (status) {
+      case 0:
+        userStatus.addClass('bg-dark');
+        userStatus.text('미등록');
+        break;
+      case 1:
+        userStatus.addClass('bg-green');
+        userStatus.text('활성');
+        break;
+      case 2:
+        userStatus.addClass('bg-warning');
+        userStatus.text('비활성');
+        break;
+      case 99:
+        userStatus.addClass('bg-secondary');
+        userStatus.text('탈퇴');
+        break;
+    }
+  },
+  getSelectedNode: function(idx) {
+    pwUtils.ajaxJSON(
+      '/user/getSelectedNode',
+      {idx: idx}, 
+      (data) => {          
+        switch(data['result']) {
+          case 100:
+            let email = data['data']['f_email'];
+            let balance = data['data']['f_balance'];
+            let referralCnt = data['data']['referralCnt'];
+            let groupCnt = data['data']['groupCnt'];
+            let sumfee = data['data']['f_sumfee'];
+            let sumcoms = data['data']['f_sumcoms'];
+            $('#modal-node').modal('show');
+            $('#nodeEmail').text(email);
+            $('#totalBalance').html(pwUtils.setFormatNumberWithPlacesSmall(balance, 2, true));
+            $('#referralCnt').text(referralCnt);
+            $('#groupCnt').text(groupCnt);
+            $('#sumfee').html(pwUtils.setFormatNumberWithPlacesSmall(sumfee, 2, true));
+            $('#sumcoms').html(pwUtils.setFormatNumberWithPlacesSmall(sumcoms, 2, true));
+            break;
+          default:
+            pwUtils.setAlert(data['msg'] || 'Server error');
+            break;
+        }                  
+      },
+      (j) => {
+        pwUtils.setAlert(data['msg'] || 'Server error');
+      });
+  },
+  nodeSearch: function() {
+    var v = $('#nodeSearch').val();
+    var r = $("#jstree").jstree(true).search(v);
+  },
+  openAllNode: function(e) {
+    $("#jstree").jstree('open_all');
+    $('.node.btn-group button').removeClass('active');
+    $(e).addClass('active');
+  },
+  closeAllNode: function(e) {
+    $("#jstree").jstree('close_all');
+    $('.node.btn-group button').removeClass('active');
+    $(e).addClass('active');
+  },
+  do_findpassword: function(f) {
+    let target = f.closest('.login-container');
+
+    let account = $(f).find('input[name=account').val();;
+
+    if (account.length < 5) {
+      alert('Please enter your account');
+      return false;
+    }
+
+    pwUtils.showLoading(target);
+
+    pwUtils.ajaxJSON('/auth/findpassword', $(f).serialize(), (data) => {
+      switch (data['result']) {
+        case 100:
+          alert('Emailed to you');
+          location.href = '/';
+          break;
+        case 201:
+          alert('Please check your ID and password.');
+          break;
+        case 401:
+          alert('The right to use is restricted. Please contact the administrator.');
+          break;
+        case 403:
+          alert('Please wait for account approval.');
+          break;
+        default:
+          alert(data.msg || "That was a wrong approach.");
+          break;
+      }
+      pwUtils.hideLoading(target);
+    }, (j) => {
+      alert('Login failed due to server error.');
+      pwUtils.hideLoading(target);
+    });
+  },
+  do_login: function(f, path) {
+    let target = f.closest('.app');
+    pwUtils.showLoading(target);
+
+    pwUtils.ajaxJSON(
+      '/auth/login', 
+      $(f).serialize(), 
+      (data) => {          
+        switch(data['result']) {
+          case 100:
+            location.href = path ?? '/';
+            return;
+            break;
+          default:
+            pwUtils.setAlert(data['msg'] || 'Server error');
+            break;
+        }                  
+        pwUtils.hideLoading(target);  
+      },
+      (j) => {
+        pwUtils.hideLoading(target);
+        pwUtils.setAlert(data['msg'] || 'Server error');
+      });
+  }
 };
 
 var modalUtils = {
-  show: function (id, title, content, caption1, fnc1, caption2, fnc2, shownfnc) {
-
-    if (typeof title != "undefined") this.setTitle(id, title);
-    if (typeof content != "undefined")
-      this.setContent(id, content);
-    else
-      this.showOverlay(id);
-    if (typeof caption1 != "undefined") {
-      $(id).find('.close-button').text(caption1);
-    } else {
-      $(id).find('.close-button').text('닫기');
-    }
-
-    if (caption2 == true) {
-      this.showButton(id);
-    } else if (typeof caption2 == "string") {
-      this.showButton(id, caption2);
-    } else {
-      this.hideButton(id);
-    }
-
-    $(id).find('.close-button, .ico-close-button').off("click");
-
-    if (typeof fnc1 == "function")
-      $(id).find('.close-button, .ico-close-button').on("click", fnc1);
-    else {
-      $(id).find('.close-button, .ico-close-button').on("click", function () {
-        modalUtils.hide(id);
-      });
-    }
-
-    $(id).find('.modal-button').off('click');
-
-    if (typeof fnc2 == "function")
-      $(id).find('.modal-button').on("click", fnc2);
-    else
-      $(id).find('.modal-button').on("click", function () {
-        modalUtils.hide(id);
-      });
-
-    $(id).modal('show');
-
-    $(id).off('shown.bs.modal');
-
-    if (typeof shownfnc == "function") {
-      $(id).on('shown.bs.modal', shownfnc);
-    }
-  },
-  showPasswd: function (procFunc) {
-
-    let id = '#modal-password';
-
-    $(id).find('.modal-button').off("click");
-
-    if (typeof procFunc == "function")
-      modalUtils.setButton(id, procFunc);
-    else
-      modalUtils.setButton(id, () => {
-        modalUtils.hide(id);
-      });
-
-    $(id).modal('show')
-  },
   hidestay: function (id) {
     $(id).modal('hide');
     this.hideOverlay(id);
@@ -550,13 +471,6 @@ var modalUtils = {
   },
   showOverlay: function (id, fade) {
     $(id).find('.overlay').show().addClass('d-flex');
-    /*
-    if (fade == undefined)
-      $(id).find('.overlay').show().addClass('d-flex');    
-    else {
-      $(id).find('.overlay').fadeIn().addClass('d-flex');    
-    }
-    */
   },
   hideOverlay: function (id, fade) {
     if (fade == undefined)

@@ -24,30 +24,31 @@
               </div>
               <div class="text-start">
                 <div>
-                  <h5 class="mt-2 mb-2">
+                  <h6 class="mt-2 mb-3">
                     <%=user.f_email%>
-                  </h5>
+                  </h6>
                 </div>
                 <h5>
-                  <i class="fa-solid fa-users"></i> <%=referralCnt%>
+                  <span class="badge bg-primary fs-12px"><i class="fa-solid fa-users"></i> <%=groupCnt%></span>
+                  <span class="badge bg-primary fs-12px ms-1"><i class="fa-solid fa-user"></i> <%=referralCnt%></span>
                 </h5>
               </div>
             </div>
             <div class="row text-truncate">
               <div class="col">
                 <div>Total Balance</div>
-                <div class="fs-20px mb-5px fw-bold text-green">$<span data-animation="number" data-value="<%=wallet.f_balance%>"><%=wallet.f_balance%></span></div>
+                <div class="fs-20px mb-5px fw-bold text-green">$<span><%-helper.setFormatNumberWithPlacesSmall(wallet.f_balance, 2, true)%></span></div>
               </div>
             </div>
             <hr class="bg-white bg-opacity-50">
             <div class="row text-truncate">
               <div class="col-6">
                 <div>누적 수수료</div>
-                <div class="fs-18px mb-5px fw-bold text-green">$<span data-animation="number" data-value="<%=user.f_sumfee%>"><%=user.f_sumfee%></span></div>
+                <div class="fs-18px mb-5px fw-bold text-green">$<span><%-helper.setFormatNumberWithPlacesSmall(user.f_sumfee, 2, true)%></span></div>
               </div>
               <div class="col-6">
                 <div>롤업 커미션</div>
-                <div class="fs-18px mb-5px fw-bold text-green">$<span data-animation="number" data-value="<%=user.f_sumcoms%>"><%=user.f_sumcoms%></span></div>
+                <div class="fs-18px mb-5px fw-bold text-green">$<span><%-helper.setFormatNumberWithPlacesSmall(user.f_sumcoms, 2, true)%></span></div>
               </div>
             </div>
           </div>
@@ -57,27 +58,7 @@
 
     <script>
       window.addEventListener('DOMContentLoaded', (event) => {
-        let status = <%=user.f_status%>;
-        let userStatus = $('.user-status');
-        //(0 : 미등록, 1: 활성, 2:비활성, 90:탈퇴)
-        switch (status) {
-          case 0:
-            userStatus.addClass('bg-dark');
-            userStatus.text('미등록');
-            break;
-          case 1:
-            userStatus.addClass('bg-green');
-            userStatus.text('활성');
-            break;
-          case 2:
-            userStatus.addClass('bg-warning');
-            userStatus.text('비활성');
-            break;
-          case 99:
-            userStatus.addClass('bg-secondary');
-            userStatus.text('탈퇴');
-            break;
-        }
+        pwUtils.userStatus(<%=user.f_status%>);
       });
     </script>
 

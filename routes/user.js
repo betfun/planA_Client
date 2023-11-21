@@ -18,4 +18,7 @@ router.post('/doEditWallet', catchErrors(userCtlr.doEditWallet));
 router.get('/trans', catchErrors(tranCtlr.getTrans));
 
 router.get('/tree', catchErrors(userCtlr.getTree));
+
+router.post('/getSelectedNode', catchErrors(userCtlr.getSelectedNode));
+
 module.exports = router;

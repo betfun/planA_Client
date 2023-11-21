@@ -21,12 +21,67 @@
 					<% if(!tree || tree.length==0) { %>
 						<div>데이터가 없습니다</div>
 						<%} else { %>
+							<div class="node btn-group mb-3">
+								<button class="btn btn-white active" onclick="pwUtils.openAllNode($(this))"><i class="fa fa-folder-tree me-1"></i>전체 열기</button>
+								<button class="btn btn-white" onclick="pwUtils.closeAllNode($(this))"><i class="fa fa-folder me-1"></i>전체 닫기</button>
+							</div>
 							<div class="input-group mb-3">
 								<input type="text" id="nodeSearch" class="form-control" placeholder="Search">
-								<button type="button" id="nodeSearchBtn" class="btn btn-outline-secondary" onclick="nodeSearch()"><i class="fa-solid fa-magnifying-glass me-1"></i>검색</button>
+								<button type="button" id="nodeSearchBtn" class="btn btn-secondary" onclick="pwUtils.nodeSearch()"><i class="fa-solid fa-magnifying-glass me-1"></i>검색</button>
 							</div>
 							<div id="jstree"></div>
 							<% } %>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- #modal-dialog -->
+	<div class="modal fade" id="modal-node">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">상세정보</h4>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+				</div>
+				<div class="modal-body">
+					<div class="d-flex gap-3">
+						<div class="mb-3">
+							<a href="javascript:;" class="d-block w-60px position-relative">
+								<i class="fas fa-5x fa-circle-user text-gray-600"></i>
+								<!-- <img src="/assets/img/user/user-6.jpg" alt="" class="mw-100 rounded-pill"> -->
+								<span class="badge user-status position-absolute top-0 start-0"></span>
+							</a>
+						</div>
+						<div class="text-start">
+							<div>
+								<h6 class="mt-2 mb-3">
+									<span id="nodeEmail"></span>
+								</h6>
+							</div>
+							<h5>
+								<span class="badge bg-primary fs-12px"><i class="fa-solid fa-users"></i> <span id="groupCnt"></span></span>
+								<span class="badge bg-primary fs-12px ms-1"><i class="fa-solid fa-user"></i> <span id="referralCnt"></span></span>
+							</h5>
+						</div>
+					</div>
+					<div class="row text-truncate">
+						<div class="col">
+							<div>Total Balance</div>
+							<div class="fs-20px mb-5px fw-bold text-green">$<span id="totalBalance"></span></div>
+						</div>
+					</div>
+					<hr class="bg-white bg-opacity-50">
+					<div class="row text-truncate">
+						<div class="col-6">
+							<div>누적 수수료</div>
+							<div class="fs-18px mb-5px fw-bold text-green">$<span id="sumfee"></span></div>
+						</div>
+						<div class="col-6">
+							<div>롤업 커미션</div>
+							<div class="fs-18px mb-5px fw-bold text-green">$<span id="sumcoms"></span></div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -82,13 +137,11 @@
 						"icon": "fa fa-user text-warning fa-lg",
 					},
 				}
-			});	
+			}).bind('select_node.jstree', function(event,data) {
+				var idx = data.instance.get_node(data.selected).id;
+				pwUtils.getSelectedNode(idx);
+			});
 		});
-
-		function nodeSearch() {
-			var v = $('#nodeSearch').val();
-			$("#jstree").jstree(true).search(v);
-		}
 		
 	</script>
 	<%- include('../footer'); %>

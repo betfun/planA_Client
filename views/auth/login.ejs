@@ -44,7 +44,7 @@
 							</label>
 						</div>
 						<div class="mb-20px">
-							<button type="button" class="btn btn-theme d-block w-100 h-45px btn-lg" onclick="do_login(this.form);">로그인</button>
+							<button type="button" class="btn btn-theme d-block w-100 h-45px btn-lg" onclick="pwUtils.do_login(this.form, <%=path%>);">로그인</button>
 						</div>
 
 						<div class="text-gray-500">
@@ -70,37 +70,13 @@
 				$('input[name=password').keyup((e)=>{
 					
 					if (e.keyCode == 13) {
-						do_login(e.currentTarget.form);
+						pwUtils.do_login(e.currentTarget.form, <%=path%>);
 					}
 				});
 
 			});
 
-			function do_login(f) {
 
-				let target = f.closest('.app');
-				pwUtils.showLoading(target);
-
-				pwUtils.ajaxJSON(
-					'/auth/login', 
-					$(f).serialize(), 
-					(data) => {          
-						switch(data['result']) {
-							case 100:
-								location.href = '<%=path ?? '/'%>';
-								return;
-								break;
-							default:
-								pwUtils.setAlert(data['msg'] || 'Server error');
-								break;
-						}                  
-						pwUtils.hideLoading(target);  
-					},
-					(j) => {
-						pwUtils.hideLoading(target);
-						pwUtils.setAlert(data['msg'] || 'Server error');
-					});
-			}
 		</script>
 
 <%- include('./footer'); %>
