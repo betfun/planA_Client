@@ -75,8 +75,8 @@
                       <td class="text-center"><%=trans.length-index%></td>
                       <td class="text-center"><%-typeHTML%></td>
                       <td class="text-center"><%-statusHTML%></td>
-                      <td class="text-end"><%=amount%></td>
-                      <td class="text-end"><%=fee%></td>
+                      <td class="text-end"><%-helper.setFormatNumberWithPlacesSmall(amount, 2, true)%></td>
+                      <td class="text-end"><%-helper.setFormatNumberWithPlacesSmall(fee, 2, true)%></td>
                       <td class="text-end"><span class="badge bg-primary"><%=token%></span><span class="badge bg-success ms-2"><%=network%></span><br><%=address%></td>
                       <td class="text-center"><%=regAt%></td>
                     </tr>

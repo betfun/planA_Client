@@ -40,11 +40,11 @@
 						<div class="form-check mb-20px">
 							<input class="form-check-input border-0" type="checkbox" name="rememberMe" id="rememberMe" value="on" <%=rememberMe%>>
 							<label class="form-check-label fs-13px text-gray-500" for="rememberMe">
-								Remember Me
+								아이디 기억하기
 							</label>
 						</div>
 						<div class="mb-20px">
-							<button type="button" class="btn btn-theme d-block w-100 h-45px btn-lg" onclick="pwUtils.do_login(this.form, <%=path%>);">로그인</button>
+							<button type="button" class="btn btn-theme d-block w-100 h-45px btn-lg" onclick="pwUtils.do_login(this.form, '<%=path%>');">로그인</button>
 						</div>
 
 						<div class="text-gray-500">
@@ -70,7 +70,7 @@
 				$('input[name=password').keyup((e)=>{
 					
 					if (e.keyCode == 13) {
-						pwUtils.do_login(e.currentTarget.form, <%=path%>);
+						pwUtils.do_login(e.currentTarget.form, '<%=path%>');
 					}
 				});
 
