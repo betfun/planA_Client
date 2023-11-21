@@ -16,81 +16,75 @@
 					<h4 class="panel-title"><i class="fa fa-list me-1"> </i> 전송 내역</h4>
 				</div>
 				<div class="panel-body">
-          <form method="get" name="listForm" id="listForm" autocomplete="off" action="javascript:;;">
+          <form method="get" name="listForm" id="listForm" autocomplete="off" action="javascript:;">
             <input type="hidden" name="s_page" value="<%=s_page%>">
-            <div class="table-responsive">
-              <table class="table dataTable table-striped table-hover table-bordered align-middle">
-                <thead>              
-                  <tr class="text-center">
-                    <th class="text-nowrap"></th>
-                    <th class="text-nowrap">구분</th>
-                    <th class="text-nowrap">상태</th>
-                    <th class="text-nowrap">금액</th>
-                    <th class="text-nowrap">수수료</th>
-                    <th class="text-nowrap">주소</th>
-                    <th class="text-nowrap">날짜</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% if(!trans || trans.length == 0) {%>
-                  <tr>
-                    <td class="text-center h-50px" colspan="7">
-                      데이터가 존재하지 않습니다.
-                    </td>
-                  </tr>
-                  <% } else {
-                    trans.forEach(function(el, index) {
-                      let type = el.f_type;
-                      let typeHTML = '';
-                      switch(type) {
-                        case 1:
-                          typeHTML = '<span class="badge bg-green fs-12px">롤업</span>';
-                          break;
-                        default:
-                          break;
-                      }
-                      let status = el.f_status;
-                      let statusHTML = '';
-                      switch(status) {
-                        case 0:
-                          statusHTML = '<span class="text-danger"><i class="fa fa-pause fa-lg me-1"></i> 대기</span>';
-                          break;
-                        case 1:
-                          statusHTML = '<span class="text-warning"><i class="fas fa-spinner fa-spin fa-lg me-1"></i> 전송</span>';
-                          break;
-                        case 2:
-                          statusHTML = '<span class="text-success"><i class="fas fa-circle-dot fa-lg me-1"></i> 완료</span>';
-                          break;
-                        default:
-                          break;
-                      }
-                      let amount = el.f_amount;
-                      let fee = el.f_fee; 
-                      let token = el.f_token;
-                      let network = el.f_network;
-                      let address = el.f_address;
-                      let regAt = el.f_regAt;
-                    %>
-                    <tr>
-                      <td class="text-center"><%=trans.length-index%></td>
-                      <td class="text-center"><%-typeHTML%></td>
-                      <td class="text-center"><%-statusHTML%></td>
-                      <td class="text-end"><%-helper.setFormatNumberWithPlacesSmall(amount, 2, true)%></td>
-                      <td class="text-end"><%-helper.setFormatNumberWithPlacesSmall(fee, 2, true)%></td>
-                      <td class="text-end"><span class="badge bg-primary"><%=token%></span><span class="badge bg-success ms-2"><%=network%></span><br><%=address%></td>
-                      <td class="text-center"><%=regAt%></td>
-                    </tr>
-                    <% }) %>
-                  <% } %>
-                </tbody>
-              </table>
+            
+            <div>
+              <% if(!trans || trans.length == 0) {%>
+              
+                <div class="alert text-center">
+                  데이터가 존재하지 않습니다.
+                </div>
+              
+              <% } else {
+                trans.forEach(function(el, index) {
+                  let type = el.f_type;
+                  let typeHTML = '';
+                  switch(type) {
+                    case 1:
+                      typeHTML = '<span class="badge bg-default text-dark rounded-pill ">롤업</span>';
+                      break;
+                    default:
+                      break;
+                  }
+                  let status = el.f_status;
+                  let statusHTML = '';
+                  switch(status) {
+                    case 0:
+                      statusHTML = '<span class="badge bg-danger"><i class="fa fa-pause fa-lg me-1"></i> 대기</span>';
+                      break;
+                    case 1:
+                      statusHTML = '<span class="badge bg-warning"><i class="fas fa-spinner fa-spin fa-lg me-1"></i> 전송</span>';
+                      break;
+                    case 2:
+                      statusHTML = '<span class="badge bg-success"><i class="fas fa-check fa-lg me-1"></i> 완료</span>';
+                      break;
+                    default:
+                      break;
+                  }
+                  let amount = el.f_amount;
+                  let fee = el.f_fee; 
+                  let token = el.f_token;
+                  let network = el.f_network;
+                  let address = el.f_address;
+                  let regAt = el.f_regAt;
+                %>
+
+                <div class="d-flex align-items-center mb-15px">
+                  <div class="rounded-3 me-10px bg-white p-3px">
+                    <%-statusHTML%>
+                  </div>
+                  <div class="text-truncate">
+                    <div>
+                      <span>$<%-helper.setFormatNumberWithPlacesSmall(amount, 2, true)%></span>
+                      <span class="text-gray-600 fs-10px">($<%-helper.setFormatNumberWithPlacesSmall(fee, 2, true)%>)</span>
+                    </div>
+                    <div class="fs-10px"><%=address%></div>
+                  </div>
+                  <div class="ms-auto text-end">
+                    <div><%-typeHTML%></div>
+                    <div class="text-gray-600 fs-10px"><%=regAt%></div>
+                  </div>
+                </div>
+                <% }) %>
+              <% } %>
             </div>
           </form>
-          <div class="row pt-2">
-            <div class="col-sm-5">
+          <div class="d-flex flex-column align-items-center pt-2">
+            <div class="mb-3 text-gray-600">
               <%=`총 ${helper.setFormatNumber(totalcnt)}개중 ${helper.setFormatNumber(pagesnum)}부터 ${helper.setFormatNumber(pageenum>totalcnt?totalcnt:pageenum)}까지 출력중`%>
             </div>
-            <div class="col-sm-7">
+            <div>
               <%-pagination%>
             </div>
           </div>     
