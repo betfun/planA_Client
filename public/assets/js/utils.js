@@ -365,7 +365,7 @@ let pwUtils = {
     let account = $(f).find('input[name=account').val();;
 
     if (account.length < 5) {
-      alert('Please enter your account');
+      alert('계정을 입력해주세요');
       return false;
     }
 
@@ -374,27 +374,58 @@ let pwUtils = {
     pwUtils.ajaxJSON('/auth/findpassword', $(f).serialize(), (data) => {
       switch (data['result']) {
         case 100:
-          alert('Emailed to you');
+          alert('이메일을 확인해 주세요.');
           location.href = '/';
           break;
         case 201:
-          alert('Please check your ID and password.');
+          alert('아이디 또는 비밀번호를 확인해주세요.');
           break;
         case 401:
-          alert('The right to use is restricted. Please contact the administrator.');
+          alert('관리자에게 문의하시기 바랍니다.');
           break;
         case 403:
-          alert('Please wait for account approval.');
+          alert('계정 승인을 기다리십시오.');
           break;
         default:
-          alert(data.msg || "That was a wrong approach.");
+          alert(data.msg || "잘못된 접근입니다.");
           break;
       }
       pwUtils.hideLoading(target);
-    }, (j) => {
-      alert('Login failed due to server error.');
-      pwUtils.hideLoading(target);
     });
+  },
+  do_resetpassword: (f) => {
+    let target = f.closest('.login-container');
+
+    let account = $(f).find('input[name=account').val();;
+
+    if (account.length < 5) {
+      alert('아이디를 확인해 주시기 바랍니다.');
+      location.href = '/';
+    }
+
+    pwUtils.showLoading(target);
+
+    pwUtils.ajaxJSON('/auth/resetpassword', $(f).serialize(), (data) => {        
+      switch(data['result']) {
+        case 100:
+          alert('비밀번호가 변경되었습니다.');
+          location.href = '/';
+          break;
+        case 201:
+          alert('아이디 또는 비밀번호를 확인해 주시기 바랍니다.');              
+          break;
+        case 401:
+          alert('관리자에게 문의하시기 바랍니다.');              
+          break;
+        case 403:
+          alert('계정 승인을 기다리십시오.');              
+          break;
+        default:
+          alert(data.msg || "잘못된 접근입니다.");
+          break;
+        }
+        pwUtils.hideLoading(target);
+    });    
   },
   do_login: function(f, path) {
     let target = f.closest('.app');
@@ -414,11 +445,8 @@ let pwUtils = {
             break;
         }                  
         pwUtils.hideLoading(target);  
-      },
-      (j) => {
-        pwUtils.hideLoading(target);
-        pwUtils.setAlert(data['msg'] || 'Server error');
-      });
+      }
+    );
   }
 };
 

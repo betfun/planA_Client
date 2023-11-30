@@ -102,10 +102,10 @@ module.exports = {
   resetPassword: async (req, res) => {
 
     let token = helper.getRequest(req.query._t, '');
-    let account = helper.getRequest(req.query.account, '');
+    let account = helper.getRequest(req.query._account, '');
     let bRst = true;
     let msg = '';
-
+ 
     if (!token || !account) bRst = false;
 
     token = decodeURIComponent(token);
@@ -113,10 +113,10 @@ module.exports = {
 
     try {
 
-      let bcompare = await bcrypt.compare(account, token);
+      let bcompare = await bcrypt.compare(account+process.env.CRYPTO_KEY, token);
 
       if (!bcompare) throw new Error('Not equal bcrypt token')
-    
+
       let rsPasswd = await dbHelper.getOneRow('select *, TIMESTAMPDIFF(SECOND, f_reqAt, NOW()) AS sec from tb_resetpasswd where f_account = ? and f_token = ? limit 1', [account, token])
 
       if (!rsPasswd) throw new Error('The request is invalid.')
@@ -157,18 +157,20 @@ module.exports = {
 
       if (new_password != confirm_password) throw new Error('The password does not match.');
 
-      let bcompare = await bcrypt.compare(account, token);
+      let bcompare = await bcrypt.compare(account+process.env.CRYPTO_KEY, token);
 
       if (!bcompare) throw new Error('Not equal bcrypt token')
 
-      let rsPasswd = await dbHelper.getOneRow('select *, TIMESTAMPDIFF(SECOND, f_reqAt, NOW()) AS sec from tb_resetpasswd where f_account = ? and token = ? and doneAt is Null', [account, token])
+      let rsPasswd = await dbHelper.getOneRow('select *, TIMESTAMPDIFF(SECOND, f_reqAt, NOW()) AS sec from tb_resetpasswd where f_account = ? and f_token = ? and f_doneAt is Null', [account, token])
 
       if (!rsPasswd) throw new Error('That was a wrong approach.');
 
       if (Number(rsPasswd['sec']) > Number(process.env.TOKEN_DELAY)) throw new Error('Request timeout');
 
-      let rsRst = await dbHelper.exeQuery('update tb_user set `password` = MD5(?) where f_email = ?', [new_password, account]);
-      rsRst = await dbHelper.exeQuery('update tb_resetpasswd set doneAt = NOW() where f_account = ? and token = ? ', [account, token]);
+      let encryptedPwd = await bcrypt.hash(new_password, Number(process.env.CRYPTO_ROUND));
+
+      let rsRst = await dbHelper.exeQuery('update tb_user set `f_pwd` = ?  where f_email = ?', [encryptedPwd, account]);
+      rsRst = await dbHelper.exeQuery('update tb_resetpasswd set f_doneAt = NOW() where f_account = ? and f_token = ? ', [account, token]);
 
       rst.result = 100;
 
@@ -195,7 +197,7 @@ module.exports = {
 
     let account = helper.getRequest(req.body.account, '');
 
-    let rst = {result:0, msg: ''};
+    let rst = {result:0, msg: ''};  
 
     try {
 
@@ -207,12 +209,12 @@ module.exports = {
 
       if (!rsUser) throw new Error('This is an unknown user.');
 
-      let rsMailCnt = await dbHelper.getOneRow('SELECT COUNT(*) as cnt FROM tb_resetpasswd WHERE f_account = ? AND DATEDIFF(f_reqAt, NOW()) = 0 ;', [account])
+      let rsMailCnt = await dbHelper.getOneRow('SELECT COUNT(*) as cnt FROM tb_resetpasswd WHERE f_account = ? AND DATEDIFF(f_reqAt, NOW()) = 0 ;', [account]);
 
       if (rsMailCnt['cnt'] > 5) throw new Error('Exceed 5 of emails sent per day');
 
-      let token = await bcrypt.hash(account, Number(process.env.CRYPTO_ROUND));
-      
+      let token = await bcrypt.hash(account+process.env.CRYPTO_KEY, Number(process.env.CRYPTO_ROUND));
+ 
       let mailTemp = mailerHelper.templateForgotEmail(rsUser['f_email'], encodeURIComponent(account), encodeURIComponent(token));
 
       let rsInfo = await mailerHelper.send(account, 'Reset your password', '', mailTemp);
@@ -223,7 +225,7 @@ module.exports = {
       
       if (ipAddress.startsWith('::ffff:')) {ipAddress = ipAddress.substring(7)}    
 
-      dbHelper.exeQuery('insert into tb_resetpasswd (f_account, f_token, f_ip) values( ?, ?, ?)', [email, token, ipAddress]);
+      dbHelper.exeQuery('insert into tb_resetpasswd (f_account, f_token, f_ip) values( ?, ?, ?)', [rsUser['f_email'], token, ipAddress]);
 
       rst.result = 100;
 

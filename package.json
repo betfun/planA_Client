@@ -1,11 +1,11 @@
 {
-  "name": "APlan",
+  "name": "AceKO",
   "version": "1.0.0",
   "description": "",
   "scripts": {
     "start": "node ./server.js",
     "dev": "nodemon ./server.js --ignore 'public/*'",
-    "debug": "@powershell -Command $env:DEBUG='planA:*';nodemon ./server.js --ignore 'public/*'"
+    "debug": "@powershell -Command $env:DEBUG='AceKO:*';nodemon ./server.js --ignore 'public/*'"
   },
   "keywords": [],
   "author": "",
