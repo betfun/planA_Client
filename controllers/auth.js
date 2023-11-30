@@ -64,7 +64,7 @@ module.exports = {
   
       param = [rsUser.idx, ipAddress, userAgent, refererSite];
   
-      await dbHelper.exeQuery('insert into tb_user_log (f_userIdx, f_ip, f_userAgent, f_refererSite) values (?, ?, ?, ?)', param);
+      await dbHelper.exeQuery('insert into tb_user_log (f_userIdx, f_ip, f_userAgent, f_refererSite, f_regAt) values (?, ?, ?, ?, NOW())', param);
   
       req.session.logined = true;
       req.session.idx = rsUser.idx;
@@ -225,7 +225,7 @@ module.exports = {
       
       if (ipAddress.startsWith('::ffff:')) {ipAddress = ipAddress.substring(7)}    
 
-      dbHelper.exeQuery('insert into tb_resetpasswd (f_account, f_token, f_ip) values( ?, ?, ?)', [rsUser['f_email'], token, ipAddress]);
+      dbHelper.exeQuery('insert into tb_resetpasswd (f_account, f_token, f_ip, f_reqAt) values( ?, ?, ?, NOW())', [rsUser['f_email'], token, ipAddress]);
 
       rst.result = 100;
 
