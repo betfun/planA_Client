@@ -102,7 +102,7 @@ exports.getTree = async (req, res) => {
  
   const tree = await dbHelper.getRows(`
       SELECT * FROM tb_node N LEFT JOIN tb_user U ON N.f_useridx = U.idx
-      WHERE f_node LIKE "%:?:%" ORDER BY N.f_level DESC`, [idx]);
+      WHERE N.f_node LIKE "%:?:%" and U.f_status <> 1 ORDER BY N.f_level DESC`, [idx]);
 
   res.render('user/tree', {tree: tree ?? {}, userIdx: idx});
 }

@@ -94,13 +94,13 @@ exports.templateForgotEmail = (_name, _account, _token) => {
                         <td>
                           <span style="font-family: Helvetica Neue, Helvetica, Lucida Grande, tahoma, verdana,arial, sans-serif;font-size: 16px;line-height: 21px;color: #141823;">
                             Hello! ${_name}
-                            <h3>Resseting your password:</h3>
+                            <h3>Reset your password:</h3>
                             <p style="margin:1em 0px">We received a request to change your AceKO account password.</p>
                             <a href="${host}/auth/resetpassword?_t=${_token}&_account=${_account}" target="_blank" style="display: inline-block;background-color: #3a79e3; color: #fff;text-decoration: none;padding:1rem">
                               Change your password
                             </a>                          
                             <p style="margin:1em 0px">If you didn't request this, please ignore this email</p>
-                            <p>Your password won't change until you access thie link above and create a new one.</p>                          
+                            <p>The password will not change until you access the link above and create a new password.</p>                          
                           </span>
                         </td>
                       </tr>

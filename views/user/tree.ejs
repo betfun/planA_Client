@@ -49,7 +49,6 @@
 						<div class="mb-3">
 							<a href="javascript:;" class="d-block w-60px position-relative">
 								<i class="fas fa-5x fa-circle-user text-gray-600"></i>
-								<!-- <img src="/assets/img/user/user-6.jpg" alt="" class="mw-100 rounded-pill"> -->
 								<span class="badge user-status position-absolute top-0 start-0"></span>
 							</a>
 						</div>
@@ -99,10 +98,38 @@
 		});
 
 		data.forEach( (e, i) => {
+			let status = e.f_status;
+			let userStatus = '';
+			let icon = '';
+		
+			//(1 : 미등록, 2: 활성, 3:비활성, 9:탈퇴)
+			switch (status) {
+				case 1:
+					userStatus = '<span class="badge bg-dark ms-1">미등록</span>';
+					icon = 'fa fa-user-slash fa-lg text-dark';
+					break;
+				case 2:
+					userStatus = '<span class="badge bg-green ms-1">활성</span>';
+					icon = 'fa fa-user fa-lg text-green';
+					break;
+				case 3:
+					userStatus = '<span class="badge bg-warning ms-1">비활성</span>';
+					icon = 'fa fa-user fa-lg text-warning';
+					break;
+				case 9:
+					userStatus = '<span class="badge bg-secondary ms-1">탈퇴</span>';
+					icon = 'fa fa-ban fa-lg text-secondary';
+					break;
+				default:
+					userStatus = '<span class="badge bg-warning ms-1">Not status</span>';
+					icon = 'fa fa-ban fa-lg text-danger';
+					break;
+			}
+			
 			let node = {
 				id: e.idx,
 				text: e.f_email,
-				//icon        : "string" // string for custom
+				icon: icon, // string for custom
 				state: {
 					opened: true  // is the node open
 					// disabled  : boolean  // is the node disabled

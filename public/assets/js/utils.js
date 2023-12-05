@@ -295,22 +295,23 @@ let pwUtils = {
   },
   userStatus: function(status) {
     let userStatus = $('.user-status');
-    //(0 : 미등록, 1: 활성, 2:비활성, 90:탈퇴)
+    let bg = 'bg-dark bg-green bg-warning bg-secondary';
+    //(1 : 미등록, 2: 활성, 3:비활성, 9:탈퇴)
     switch (status) {
-      case 0:
-        userStatus.addClass('bg-dark');
+      case 1:
+        userStatus.removeClass(bg).addClass('bg-dark');
         userStatus.text('미등록');
         break;
-      case 1:
-        userStatus.addClass('bg-green');
+      case 2:
+        userStatus.removeClass(bg).addClass('bg-green');
         userStatus.text('활성');
         break;
-      case 2:
-        userStatus.addClass('bg-warning');
+      case 3:
+        userStatus.removeClass(bg).addClass('bg-warning');
         userStatus.text('비활성');
         break;
-      case 99:
-        userStatus.addClass('bg-secondary');
+      case 9:
+        userStatus.removeClass(bg).addClass('bg-secondary');
         userStatus.text('탈퇴');
         break;
     }
@@ -328,6 +329,7 @@ let pwUtils = {
             let groupCnt = data['data']['groupCnt'];
             let sumfee = data['data']['f_sumfee'];
             let sumcoms = data['data']['f_sumcoms'];
+            let status = data['data']['f_status'];
             $('#modal-node').modal('show');
             $('#nodeEmail').text(email);
             $('#totalBalance').html(pwUtils.setFormatNumberWithPlacesSmall(balance, 2, true));
@@ -335,6 +337,7 @@ let pwUtils = {
             $('#groupCnt').text(groupCnt);
             $('#sumfee').html(pwUtils.setFormatNumberWithPlacesSmall(sumfee, 2, true));
             $('#sumcoms').html(pwUtils.setFormatNumberWithPlacesSmall(sumcoms, 2, true));
+            pwUtils.userStatus(status);
             break;
           default:
             pwUtils.setAlert(data['msg'] || 'Server error');

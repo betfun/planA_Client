@@ -7,7 +7,7 @@ let cmUtils = {
       }
 
       if (f.password.value != f.repassword.value) {
-        pwUtils.setAlert('The password does not match.');
+        pwUtils.setAlert('비밀번호가 일치하지 않습니다');
         f.password.focus();
         return;
       }
@@ -21,7 +21,7 @@ let cmUtils = {
       (data) => {
         switch (data['result']) {
           case 100:
-            pwUtils.swalSuccess('User infomation has been modified.'), () => { location.href = '/'; }
+            pwUtils.swalSuccess('정보가 수정되었습니다.'), () => { location.href = '/'; }
             break;
           default:
             pwUtils.setAlert(data['msg'] || 'Server error');
@@ -56,7 +56,7 @@ let cmUtils = {
       (data) => {
         switch (data['result']) {
           case 100:
-            pwUtils.swalSuccess('Wallet infomation has been modified.'), () => { location.href = '/'; }
+            pwUtils.swalSuccess('정보가 수정되었습니다.'), () => { location.href = '/'; }
             break;
           default:
             pwUtils.setAlert(data['msg'] || 'Server error');
