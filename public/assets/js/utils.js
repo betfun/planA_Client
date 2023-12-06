@@ -281,11 +281,30 @@ let pwUtils = {
       html: '<span class="spinner spinner-sm"></span>',
     },
   },
+  /* search page */
+  page_search: function()
+  {
+    let obj = $(event.target);
+
+    if (!obj.is('button')) {
+      obj.prop('readonly', true);
+      obj.parent().find('button').prop('disabled', true);
+    } else {
+      obj.prop('disabled', true);
+    }
+
+    this.page_move(1);
+  },
   /* move page */
   page_move: function(page)
   {
     $("#listForm")[0].s_page.value = page;   
     this.page_link();
+  },
+  /* init page */  
+  page_init: function()
+  {    
+    document.location.href = window.location.pathname
   },
   /* reload page */
   page_link: function()
@@ -293,6 +312,19 @@ let pwUtils = {
     $("#listForm")[0].action = window.location.pathname;
     $("#listForm")[0].submit();
   },
+  //달력표시
+  setDatePicker : function(id) {
+    if (typeof $ === 'function' && typeof $.datepicker === 'object') {
+      $(id).datepicker({
+        todayHighlight: true,
+        autoclose: true,
+        language: 'ko',
+        format: 'yyyy-mm-dd',
+        clearBtn: true,
+        zIndexOffset: 100
+      });
+    }      
+  }, 
   userStatus: function(status) {
     let userStatus = $('.user-status');
     let bg = 'bg-dark bg-green bg-warning bg-secondary';

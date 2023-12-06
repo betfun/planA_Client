@@ -17,6 +17,8 @@ router.post('/doEditWallet', catchErrors(userCtlr.doEditWallet));
 
 router.get('/trans', catchErrors(tranCtlr.getTrans));
 
+router.get('/withdrawal', catchErrors(tranCtlr.getWithdrawal));
+
 router.get('/tree', catchErrors(userCtlr.getTree));
 
 router.post('/getSelectedNode', catchErrors(userCtlr.getSelectedNode));

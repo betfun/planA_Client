@@ -15,10 +15,35 @@
 				<div class="panel-heading">
 					<h4 class="panel-title"><i class="fa fa-list me-1"> </i> 전송 내역</h4>
 				</div>
-				<div class="panel-body">
-          <form method="get" name="listForm" id="listForm" autocomplete="off" action="javascript:;">
-            <input type="hidden" name="s_page" value="<%=s_page%>">
-            
+        <form method="get" name="listForm" id="listForm" autocomplete="off" action="javascript:;;">
+          <input type="hidden" name="s_page" value="<%=s_page%>">   
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-sm-12 mb-2">
+                <div class="panel-tools-item justify-content-end">              
+                  <div class="input-group input-group-sm input-search-group">
+                    <input type="text" name="s_value" id="s_value" class="form-control form-control-sm" value="<%=s_value%>" placeholder="검색어">
+                    <button type="button" class="btn btn-green" onclick="pwUtils.page_search()"><i class="fas fa-search"></i> 검색</button>
+                    <button type="button" class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside"><span class="caret"></span></button>
+                    <div class="dropdown-menu dropdown-menu-end">
+                      <div class="form-group dropdown-item">                    
+                        <label>시작일</label>
+                        <input type="text" class="form-control form-control-sm dtpicker" placeholder="시작일" name="s_sdate" value="<%=s_sdate%>">
+                      </div>                  
+                      <div class="form-group dropdown-item">                    
+                        <label>종료일</label>
+                        <input type="text" class="form-control form-control-sm dtpicker" placeholder="종료일" name="s_edate" value="<%=s_edate%>">
+                      </div>                  
+                      <div class="dropdown-item">
+                        <div class="d-inline-block"><span class="btn btn-sm btn-default" onclick="pwUtils.page_init()">리셋</span></div>
+                        <div class="d-inline-block float-end"><span class="btn btn-sm btn-green" onclick="pwUtils.page_search()">검색</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> 
+            <hr>
             <div>
               <% if(!trans || trans.length == 0) {%>
               
@@ -32,7 +57,13 @@
                   let typeHTML = '';
                   switch(type) {
                     case 1:
-                      typeHTML = '<span class="badge bg-default text-dark rounded-pill ">롤업</span>';
+                      typeHTML = '<span class="badge bg-default text-dark rounded-pill bg-success">전송</span>';
+                      break;
+                    case 2:
+                      typeHTML = '<span class="badge bg-default text-dark rounded-pill bg-warning">롤업</span>';
+                      break;
+                    case 3:
+                      typeHTML = '<span class="badge bg-default text-dark rounded-pill bg-danger">출금</span>';
                       break;
                     default:
                       break;
@@ -79,16 +110,18 @@
                 <% }) %>
               <% } %>
             </div>
-          </form>
-          <div class="d-flex flex-column align-items-center pt-2">
-            <div class="mb-3 text-gray-600">
-              <%=`총 ${helper.setFormatNumber(totalcnt)}개중 ${helper.setFormatNumber(pagesnum)}부터 ${helper.setFormatNumber(pageenum>totalcnt?totalcnt:pageenum)}까지 출력중`%>
-            </div>
-            <div>
-              <%-pagination%>
-            </div>
-          </div>     
-				</div>
+            <% if(trans && trans.length > 0) {%>
+            <div class="d-flex flex-column align-items-center pt-2">
+              <div class="mb-3 text-gray-600">
+                <%=`총 ${helper.setFormatNumber(totalcnt)}개중 ${helper.setFormatNumber(pagesnum)}부터 ${helper.setFormatNumber(pageenum>totalcnt?totalcnt:pageenum)}까지 출력중`%>
+              </div>
+              <div>
+                <%-pagination%>
+              </div>
+            </div> 
+            <%}%>
+          </div>
+        </form>
 			</div>
 		</div>
 

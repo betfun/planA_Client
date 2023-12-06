@@ -3165,5 +3165,12 @@ if (document.readyState !== 'loading') {
 	document.addEventListener('DOMContentLoaded', function () {
 		App.init({disableDraggablePanel: true});
 		App.restartGlobalFunction();
+		pwUtils.setDatePicker('.dtpicker');
+
+		$('#s_value').keyup(function(event) {
+			if (event.which==13 && typeof pwUtils == 'object') { 
+				pwUtils.page_search()
+			};
+		});
 	});
 }

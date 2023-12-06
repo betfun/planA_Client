@@ -22,3 +22,41 @@
   color: #32a932 !important;
   font-weight: 700 !important;
 }
+
+.panel-tools-item {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+}
+
+.w-sm-auto {
+  width: auto !important;
+}
+
+
+@media (max-width: 576px) {
+  .panel-tools-item {
+    flex-flow: column;
+  }
+
+  .panel-tools-item .input-group {
+    width: 100%  !important;
+    margin-bottom: 0 !important;
+    margin-top: 0.25rem !important;
+  }
+
+  .w-sm-auto {
+    width: 100% !important;
+  }  
+
+  .mb-sm-max-3 {
+    margin-bottom: 0.75rem !important;
+  }
+  .mb-sm-max-2 {
+    margin-bottom: 0.5rem !important;
+  }  
+  .mb-sm-max-1 {
+    margin-bottom: 0.25rem !important;
+  }  
+  
+}
