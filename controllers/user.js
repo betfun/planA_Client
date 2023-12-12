@@ -222,7 +222,7 @@ exports.doRequestWithdrawal = async (req, res) => {
 
     let [transIdx] = await dbHelper.exeQueryConn(conn,`
     INSERT INTO tb_trans (f_type, f_status, f_useridx, f_amount, f_address, f_token, f_network) 
-    values( ?, ?, ?, ?, ?, ?, ?, ?)`, [type, status, idx, amount, address, token, network]);
+    values( ?, ?, ?, ?, ?, ?, ? )`, [type, status, idx, amount, address, token, network]);
     
     // await dbHelper.exeQueryConn(conn,`
     // INSERT INTO tb_trans_log (f_transidx, f_type, f_status, f_useridx, f_amount, f_balance, f_address, f_token, f_network, f_regAt) 
