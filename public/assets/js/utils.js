@@ -482,6 +482,61 @@ let pwUtils = {
         pwUtils.hideLoading(target);  
       }
     );
+  },
+  do_request_withdrawal: function(f) {
+    let target = f.closest('.panel-body');
+
+    let amount = $(f).find('input[name=amount]').val();
+    let balance = $(f).find('input[name=balance]').val();
+    let minUSDT = $(f).find('input[name=minUSDT]').val();
+    let maxUSDT = $(f).find('input[name=maxUSDT]').val();
+    
+    if (amount <= 0) {
+      alert('0보다 큰 금액을 입력해 주세요');
+      $(f).find('input[name=amount]').focus();
+      return false;
+    }
+
+    if (amount > Number(balance)) {
+      alert('잔액이 부족합니다.');
+      $(f).find('input[name=amount]').focus();
+      return false;
+    }
+
+    if (amount < Number(minUSDT)) {
+      alert('최소 출금액보다 신청금액이 커야합니다.');
+      $(f).find('input[name=amount]').focus();
+      return false;
+    }
+
+    if (amount > Number(maxUSDT)) {
+      alert('최대 출금액보다 신청금액이 초과하였습니다.');
+      $(f).find('input[name=amount]').focus();
+      return false;
+    }
+    
+    pwUtils.showLoading(target);
+
+    pwUtils.ajaxJSON('/user/request_withdrawal', $(f).serialize(), (data) => {
+      switch (data['result']) {
+        case 100:
+          alert("신청이 완료 되었습니다.");
+          location.href = '/user/withdrawal';
+          break;
+        case 500:
+          alert(data.msg || "서버 에러입니다.");
+          break;
+        default:
+          alert(data.msg || "잘못된 접근입니다.");
+          break;
+      }
+      pwUtils.hideLoading(target);
+    });
+  },
+  setMaxAmount: function(f) {
+    let balance = $(f).find('input[name=balance]').val();
+    balance = pwUtils.setFormatNumberWithPlaces(balance, 2, true);
+    $(f).find('input[name=amount]').val(balance);
   }
 };
 

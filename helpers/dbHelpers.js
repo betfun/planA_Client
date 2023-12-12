@@ -133,4 +133,32 @@ module.exports = _dbHelper = {
     let rs = await db.query(_q, _param);
     return rs;
   },
+
+  getSetting: async(_key = '', _like = false) => {
+
+    let rsSetting = null;
+
+    if (_key) {
+      if (_like)
+        rsSetting = await _dbHelper.getRows(`select * from tb_setting where f_key like ?`, [_key]);
+      else 
+        rsSetting = await _dbHelper.getRows(`select * from tb_setting where f_key = ?`, [_key]);
+    } else {
+      rsSetting = await _dbHelper.getRows(`select * from tb_setting`);
+    }
+
+    if (!rsSetting) return null;
+  
+    let setting = {};
+  
+    rsSetting.forEach((e)=>{
+      let key = e.f_key;
+      setting[key] = Number.isNaN(e.f_value)?e.f_value:Number(e.f_value);
+      if (e.f_type == 'json') {
+        setting[key] = JSON.parse(e.f_value);
+      }
+    })
+
+    return setting;
+  }
 } 

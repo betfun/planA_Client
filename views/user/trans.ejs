@@ -2,18 +2,18 @@
 	<!-- BEGIN breadcrumb -->
 	<ol class="breadcrumb float-xl-end">
 		<li class="breadcrumb-item"><a href="javascript:;">Home</a></li>
-		<li class="breadcrumb-item active">전송 내역</li>
+		<li class="breadcrumb-item active">커미션 내역</li>
 	</ol>
 	<!-- END breadcrumb -->
 	<!-- BEGIN page-header -->
-	<h1 class="page-header mb-3">전송 내역</h1>
+	<h1 class="page-header mb-3">커미션 내역</h1>
 	<!-- END page-header -->
 
 	<div class="row">
 		<div class="col-12">
 			<div class="panel panel-inverse">
 				<div class="panel-heading">
-					<h4 class="panel-title"><i class="fa fa-list me-1"> </i> 전송 내역</h4>
+					<h4 class="panel-title"><i class="fa fa-list me-1"> </i> 커미션 내역</h4>
 				</div>
         <form method="get" name="listForm" id="listForm" autocomplete="off" action="javascript:;;">
           <input type="hidden" name="s_page" value="<%=s_page%>">   
@@ -22,7 +22,7 @@
               <div class="col-sm-12 mb-2">
                 <div class="panel-tools-item justify-content-end">              
                   <div class="input-group input-group-sm input-search-group">
-                    <input type="text" name="s_value" id="s_value" class="form-control form-control-sm" value="<%=s_value%>" placeholder="검색어">
+                    <input type="text" name="s_value" id="s_value" class="form-control form-control-sm" value="<%=s_value%>" placeholder="이메일주소">
                     <button type="button" class="btn btn-green" onclick="pwUtils.page_search()"><i class="fas fa-search"></i> 검색</button>
                     <button type="button" class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside"><span class="caret"></span></button>
                     <div class="dropdown-menu dropdown-menu-end">
@@ -52,58 +52,43 @@
                 </div>
               
               <% } else {
+                
                 trans.forEach(function(el, index) {
                   let type = el.f_type;
                   let typeHTML = '';
                   switch(type) {
                     case 1:
-                      typeHTML = '<span class="badge bg-default text-dark rounded-pill bg-success">전송</span>';
+                      typeHTML = '<span class="badge fs-11px text-dark bg-success">ACE입금</span>';
                       break;
                     case 2:
-                      typeHTML = '<span class="badge bg-default text-dark rounded-pill bg-warning">롤업</span>';
+                      typeHTML = '<span class="badge fs-11px text-dark bg-warning">롤업</span>';
                       break;
                     case 3:
-                      typeHTML = '<span class="badge bg-default text-dark rounded-pill bg-danger">출금</span>';
+                      typeHTML = '<span class="badge fs-11px text-dark bg-danger">출금</span>';
                       break;
                     default:
                       break;
                   }
-                  let status = el.f_status;
-                  let statusHTML = '';
-                  switch(status) {
-                    case 0:
-                      statusHTML = '<span class="badge bg-danger"><i class="fa fa-pause fa-lg me-1"></i> 대기</span>';
-                      break;
-                    case 1:
-                      statusHTML = '<span class="badge bg-warning"><i class="fas fa-spinner fa-spin fa-lg me-1"></i> 전송</span>';
-                      break;
-                    case 2:
-                      statusHTML = '<span class="badge bg-success"><i class="fas fa-check fa-lg me-1"></i> 완료</span>';
-                      break;
-                    default:
-                      break;
-                  }
+                  
                   let amount = el.f_amount;
-                  let fee = el.f_fee; 
-                  let token = el.f_token;
-                  let network = el.f_network;
-                  let address = el.f_address;
+                  let balance = el.f_balance;
+                  let email = el.f_email;
+                  let feerate = el.f_feerate;
                   let regAt = el.f_regAt;
+
                 %>
 
                 <div class="d-flex align-items-center mb-15px">
                   <div class="rounded-3 me-10px bg-white p-3px">
-                    <%-statusHTML%>
+                    <%-typeHTML%>
                   </div>
                   <div class="text-truncate">
                     <div>
-                      <span>$<%-helper.setFormatNumberWithPlacesSmall(amount, 2, true)%></span>
-                      <span class="text-gray-600 fs-10px">fee: $<%-helper.setFormatNumberWithPlacesSmall(fee, 2, true)%></span>
+                      <span>$<%-helper.setFormatNumberWithPlacesSmall(amount, 2, true)%> <small>(<%-feerate%>%)</small></span>
                     </div>
-                    <div class="fs-10px"><%=address%></div>
+                    <div class="fs-10px"><%=email%></div>
                   </div>
                   <div class="ms-auto text-end">
-                    <div><%-typeHTML%></div>
                     <div class="text-gray-600 fs-10px"><%=regAt%></div>
                   </div>
                 </div>

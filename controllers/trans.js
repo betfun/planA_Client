@@ -21,7 +21,7 @@ exports.getTrans = async (req, res) => {
   s_edate = helper.formatDateTime(s_edate, 'YYYY-MM-DD');
 
   let pname = req.originalUrl.split("?").shift();
-  let wheres = 'WHERE T.f_useridx = ? and (T.f_type = 1 or T.f_type = 2)';
+  let wheres = 'WHERE T.f_refidx = ? and T.f_type = 2';
   let params = [idx];
 
   // 날짜 검색
@@ -39,11 +39,11 @@ exports.getTrans = async (req, res) => {
 
   // 페이지내 검색
   if (s_value) {
-    wheres += ` AND (T.f_address = ?)`;        
+    wheres += ` AND (U.f_email = ?)`;        
     params = params.concat([`${s_value}`]);
   }
 
-  let totalcnt = await dbHelper.getOneRow(`SELECT COUNT(1) AS count FROM tb_trans_log T LEFT JOIN tb_user U ON T.f_useridx = U.idx ${wheres}`, params);
+  let totalcnt = await dbHelper.getOneRow(`SELECT COUNT(1) AS count FROM tb_comms_log T LEFT JOIN tb_user U ON T.f_useridx = U.idx ${wheres}`, params);
 
   //pagination 
   let pagination = new Pagination({
@@ -60,8 +60,8 @@ exports.getTrans = async (req, res) => {
   params = params.concat([pagination.startnum, pagination.page_rows]);
 
   const trans = await dbHelper.getRows(`
-      SELECT * FROM tb_trans_log T
-      ${wheres} ORDER BY f_regAt DESC LIMIT ?, ?`, params);
+      SELECT T.*, U.f_email FROM tb_comms_log T LEFT JOIN tb_user U ON T.f_useridx = U.idx
+      ${wheres} ORDER BY T.f_regAt DESC LIMIT ?, ?`, params);
 
   res.render('user/trans', {
     helper,
@@ -80,7 +80,7 @@ exports.getTrans = async (req, res) => {
 
 /**
  * get withdrawal
- * 타입 1: 회원 지갑에 롤업된 커미션을 개인지갑으로 전송
+ * 타입 1: ACE에서 회원 지갑에 롤업된 커미션을 개인지갑으로 전송
     타입 2: 롤업 커미션
     타입 3: 개인 지갑으로 전송요청(출금내역)
  */
@@ -140,7 +140,7 @@ exports.getWithdrawal = async (req, res) => {
 
   const trans = await dbHelper.getRows(`
       SELECT * FROM tb_trans_log T
-      ${wheres} ORDER BY f_regAt DESC LIMIT ?, ?`, params);
+      ${wheres} ORDER BY T.f_regAt DESC LIMIT ?, ?`, params);
 
   res.render('user/withdrawal', {
     helper,

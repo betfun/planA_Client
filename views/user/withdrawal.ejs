@@ -22,7 +22,7 @@
               <div class="col-sm-12 mb-2">
                 <div class="panel-tools-item justify-content-end">              
                   <div class="input-group input-group-sm input-search-group">
-                    <input type="text" name="s_value" id="s_value" class="form-control form-control-sm" value="<%=s_value%>" placeholder="검색어">
+                    <input type="text" name="s_value" id="s_value" class="form-control form-control-sm" value="<%=s_value%>" placeholder="지갑주소">
                     <button type="button" class="btn btn-green" onclick="pwUtils.page_search()"><i class="fas fa-search"></i> 검색</button>
                     <button type="button" class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside"><span class="caret"></span></button>
                     <div class="dropdown-menu dropdown-menu-end">
@@ -53,32 +53,23 @@
               
               <% } else {
                 trans.forEach(function(el, index) {
-                  let type = el.f_type;
-                  let typeHTML = '';
-                  switch(type) {
-                    case 1:
-                      typeHTML = '<span class="badge bg-default text-dark rounded-pill bg-success">전송</span>';
-                      break;
-                    case 2:
-                      typeHTML = '<span class="badge bg-default text-dark rounded-pill bg-warning">롤업</span>';
-                      break;
-                    case 3:
-                      typeHTML = '<span class="badge bg-default text-dark rounded-pill bg-danger">출금</span>';
-                      break;
-                    default:
-                      break;
-                  }
                   let status = el.f_status;
                   let statusHTML = '';
                   switch(status) {
-                    case 0:
-                      statusHTML = '<span class="badge bg-danger"><i class="fa fa-pause fa-lg me-1"></i> 대기</span>';
-                      break;
                     case 1:
-                      statusHTML = '<span class="badge bg-warning"><i class="fas fa-spinner fa-spin fa-lg me-1"></i> 전송</span>';
+                      statusHTML = '<span class="badge bg-secondary"><i class="fa fa-pause fa-lg me-1"></i> 대기</span>';
                       break;
                     case 2:
+                      statusHTML = '<span class="badge bg-warning"><i class="fas fa-spinner fa-spin fa-lg me-1"></i> 전송</span>';
+                      break;
+                    case 3:
                       statusHTML = '<span class="badge bg-success"><i class="fas fa-check fa-lg me-1"></i> 완료</span>';
+                      break;
+                    case 4:
+                      statusHTML = '<span class="badge bg-danger"><i class="fas fa-close fa-lg me-1"></i> 실패</span>';
+                      break;
+                    case 9:
+                      statusHTML = '<span class="badge bg-danger"><i class="fas fa-ban fa-lg me-1"></i> 삭제</span>';
                       break;
                     default:
                       break;
@@ -103,7 +94,6 @@
                     <div class="fs-10px"><%=address%></div>
                   </div>
                   <div class="ms-auto text-end">
-                    <div><%-typeHTML%></div>
                     <div class="text-gray-600 fs-10px"><%=regAt%></div>
                   </div>
                 </div>

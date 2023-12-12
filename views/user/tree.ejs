@@ -92,6 +92,7 @@
 		let userIdx = <%=userIdx%>;
 		let indexArray = [];
 		let nodes = {};
+		
 		data.forEach((e, i) => {
 			indexArray[e.idx] = i;
 			data[i]['children'] = [];
@@ -128,7 +129,7 @@
 			
 			let node = {
 				id: e.idx,
-				text: e.f_email,
+				text: `${e.f_email}`,
 				icon: icon, // string for custom
 				state: {
 					opened: true  // is the node open
